@@ -75,38 +75,17 @@ namespace SampleMapEditor
 
         public class Actor
         {
-            public string ClassName { get; set; }
-            public string FmdbName { get; set; }
-            public string JmpName { get; set; }
-            public string LinkUserName { get; set; }
             public string Name { get; set; }
-            public string ParamsFileBaseName { get; set; }
-            public string ResJmpName { get; set; }
-            public string ResName { get; set; }
 
 
             public Actor(dynamic actor)
             {
-                ClassName = actor["ClassName"];
-                FmdbName = actor["FmdbName"];
-                JmpName = actor["JmpName"];
-                LinkUserName = actor["LinkUserName"];
                 Name = actor["Name"];
-                ParamsFileBaseName = actor["ParamsFileBaseName"];
-                try { ResJmpName = actor["ResJmpName"]; } catch { } //ResJmpName = actor["ResJmpName"];
-                ResName = actor["ResName"];
             }
 
             public Actor()
             {
-                ClassName = "Gachihoko";
-                FmdbName = "Wsp_Shachihoko";
-                JmpName = "";
-                LinkUserName = "Gachihoko";
                 Name = "ScrambleBombFlower";
-                ParamsFileBaseName = "MapObj/ScrambleBombFlower";
-                ResJmpName = "";
-                ResName = "Wsp_Shachihoko";
             }
         }
 
@@ -156,9 +135,9 @@ namespace SampleMapEditor
         {
             Actor actor = Actors.Find(x => x.Name == name);
             if (actor == null) return null;
-            if (actor.ResName == "") return null;
+            //if (actor.ResName == "") return null;
             //return $"{PluginConfig.S2GamePath}/Model/{actor.ResName}.Nin_NX_NVN.szs";
-            return GetContentPath($"Model/{actor.ResName}.szs");
+            return GetContentPath($"Model/{actor}.szs");
         }
 
         public string GetModelPathFromObject(dynamic obj)
