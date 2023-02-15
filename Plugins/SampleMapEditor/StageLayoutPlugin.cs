@@ -45,7 +45,7 @@ namespace SampleMapEditor
             //ImGui.Checkbox("Mario Kart 8 Deluxe Map", ref IsNewSwitch);
 
             //ImguiCustomWidgets.FileSelector("Model File", ref model_path, new string[] { ".dae", ".fbx" });
-            ImGui.Text("Splatoon 2 Stage Layout");
+            ImGui.Text("Splatoon 3 Stage Layout");
 
             var size = new System.Numerics.Vector2(ImGui.GetWindowWidth() / 2, 23);
             if (ImGui.Button(TranslationSource.GetText("CANCEL"), size))
@@ -66,8 +66,8 @@ namespace SampleMapEditor
         public bool Identify(File_Info fileInfo, Stream stream)
         {
             //Just load maps from checking the byaml extension atm.
-            //return fileInfo.Extension == ".byaml";
-            return fileInfo.Extension == ".szs" && !fileInfo.FileName.Contains("Nin_NX_NVN");
+            return fileInfo.Extension == ".byml";
+            //return fileInfo.Extension == ".szs";
         }
 
 
@@ -101,13 +101,13 @@ namespace SampleMapEditor
             MapLoader.Init(this);
 
             //Root.Header = "course_muunt.byaml";
-            Root.Header = "Fld_CustomStage01_Vss.byaml (HEADER)";
+            Root.Header = "Vss_CustomStage.byml (HEADER)";
             Root.Tag = this;
 
             //FileInfo.FileName = "course_muunt.byaml";
-            //FileInfo.FileName = "Fld_Test01_Vss.byaml";
-            FileInfo.FileName = "Fld_CustomStage01_Vss.szs";
-            FileInfo.Compression = new Yaz0();
+            FileInfo.FileName = "Vss_CustomStage.byml";
+            //FileInfo.FileName = "Fld_CustomStage01_Vss.szs";
+            //FileInfo.Compression = new Yaz0();
 
             Setup(MapLoader);
 
@@ -387,7 +387,7 @@ namespace SampleMapEditor
 
 
             NodeBase pathFolder = new NodeBase("Paths");    // ???
-            NodeBase objFolder = new NodeBase("Objects");
+            NodeBase objFolder = new NodeBase("Actors");
             
             Root.Children.Clear();
 
