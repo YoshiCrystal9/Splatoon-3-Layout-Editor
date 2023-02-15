@@ -184,15 +184,15 @@ namespace SampleMapEditor
         public static string GetResourceName(string actorName)
         {
             var db = GlobalSettings.ActorDatabase;
-            if (db.ContainsKey(actorName) && db[actorName].FmdbName.Length > 0)
-                return db[actorName].ResName;
+            if (db.ContainsKey(actorName) && db[actorName].Name.Length > 0)
+                return db[actorName].Name;
             else
                 return "";
         }
 
         public static string FindFilePath(string resName)
         {
-            string resFilePath = GlobalSettings.GetContentPath($"Model\\{resName}.Nin_NX_NVN.szs");
+            string resFilePath = GlobalSettings.GetContentPath($"Model\\{resName}.Pack.szs");
 
             if (File.Exists(resFilePath)) return resFilePath;
 

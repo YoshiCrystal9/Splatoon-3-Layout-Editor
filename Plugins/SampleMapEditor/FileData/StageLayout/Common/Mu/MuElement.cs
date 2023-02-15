@@ -261,7 +261,7 @@ namespace SampleMapEditor
 
         public static string GetActorClassName(MuElement element)
         {
-            return GlobalSettings.ActorDatabase[element.Name].ClassName;
+            return GlobalSettings.ActorDatabase[element.Name].Name;
         }
         public static string GetActorClassName(dynamic element)
         {

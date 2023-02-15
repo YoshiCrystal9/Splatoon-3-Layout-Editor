@@ -511,7 +511,7 @@ namespace SampleMapEditor.LayoutEditor
                 if (GlobalSettings.ActorDatabase.ContainsKey(obj.Name))
                 {
                     //Obj requires specific model to display
-                    string modelName = GlobalSettings.ActorDatabase[obj.Name].FmdbName; // ??? -
+                    string modelName = GlobalSettings.ActorDatabase[obj.Name].Name; // ??? -
 #warning Not sure if Name should be changed to ResName or FmdbName
                     if (!string.IsNullOrEmpty(modelName))
                     {
@@ -768,7 +768,7 @@ namespace SampleMapEditor.LayoutEditor
 #warning May need to cast to correct Actor Class type. Check later.*/
 
             //Get Actor Class Name
-            string className = GlobalSettings.ActorDatabase[actorName].ClassName;
+            string className = GlobalSettings.ActorDatabase[actorName].Name;
             Type elem = typeof(MuElement);
             ByamlSerialize.SetMapObjType(ref elem, className);
             var inst = (MuElement)Activator.CreateInstance(elem);
@@ -863,7 +863,7 @@ namespace SampleMapEditor.LayoutEditor
 
             //Use object database instead if exists
             if (GlobalSettings.ActorDatabase.ContainsKey(obj.Name))
-                name = GlobalSettings.ActorDatabase[obj.Name].ResName;
+                name = GlobalSettings.ActorDatabase[obj.Name].Name;
 
             return name;
         }

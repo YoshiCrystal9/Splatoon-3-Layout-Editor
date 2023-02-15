@@ -15,46 +15,6 @@ namespace SampleMapEditor
         // ---- PROPERTIES ---------------------------------------------------------------------------------------------
 
         [ByamlMember]
-        [BindGUI("Class Name")]
-        public string ClassName
-        {
-            get => className;
-            set => SetField(ref className, value);
-        }
-        private string className;
-
-
-        [ByamlMember]
-        [BindGUI("Fmdb Name")]
-        public string FmdbName
-        {
-            get => fmdbName;
-            set => SetField(ref fmdbName, value);
-        }
-        private string fmdbName;
-
-
-        [ByamlMember]
-        [BindGUI("Jmp Name")]
-        public string JmpName
-        {
-            get => jmpName;
-            set => SetField(ref jmpName, value);
-        }
-        private string jmpName;
-
-
-        [ByamlMember]
-        [BindGUI("Link User Name")]
-        public string LinkUserName
-        {
-            get => linkUserName;
-            set => SetField(ref linkUserName, value);
-        }
-        private string linkUserName;
-
-
-        [ByamlMember]
         [BindGUI("Name")]
         public string Name
         {
@@ -63,34 +23,6 @@ namespace SampleMapEditor
         }
         private string name;
 
-
-        [ByamlMember]
-        [BindGUI("Params File Base Name")]
-        public string ParamsFileBaseName
-        {
-            get => paramsFileBaseName;
-            set => SetField(ref paramsFileBaseName, value);
-        }
-        private string paramsFileBaseName;
-
-
-        [ByamlMember]
-        [BindGUI("Res Jmp Name")]
-        public string ResJmpName
-        {
-            get => resJmpName;
-            set => SetField(ref resJmpName, value);
-        }
-        private string resJmpName;
-
-
-        [ByamlMember]
-        [BindGUI("Res Name")]
-        public string ResName
-        {
-            get => resName;
-            set => SetField(ref resName, value);
-        }
         private string resName;
 
 
