@@ -10,6 +10,7 @@ using OpenTK.Input;
 using ByamlExt.Byaml;
 using System.Collections.Generic;
 using CafeLibrary.Rendering;
+using Syroot.Maths;
 
 namespace SampleMapEditor
 {
@@ -75,38 +76,44 @@ namespace SampleMapEditor
 
         public class Actor
         {
-            public string ClassName { get; set; }
-            public string FmdbName { get; set; }
-            public string JmpName { get; set; }
-            public string LinkUserName { get; set; }
-            public string Name { get; set; }
-            public string ParamsFileBaseName { get; set; }
-            public string ResJmpName { get; set; }
-            public string ResName { get; set; }
+            public string CalcPriority { get; set; }
+            public string Category { get; set; }
+            public string Fmdb { get; set; }
+            public int InstanceHeapSize { get; set; }
+            public bool IsCalcNodePushBack { get; set; }
+            public bool IsFarActor { get; set; }
+            public bool IsNotTurnToActor { get; set; }
+            public Vector3F ModelAabbMax { get; set; }
+            public Vector3F ModelAabbMin { get; set; }
+            public string __RowId { get; set; }
 
 
             public Actor(dynamic actor)
             {
+                CalcPriority = actor["CalcPriority"];
+                Category = actor["Category"];
                 ClassName = actor["ClassName"];
-                FmdbName = actor["FmdbName"];
-                JmpName = actor["JmpName"];
-                LinkUserName = actor["LinkUserName"];
-                Name = actor["Name"];
-                ParamsFileBaseName = actor["ParamsFileBaseName"];
-                try { ResJmpName = actor["ResJmpName"]; } catch { } //ResJmpName = actor["ResJmpName"];
-                ResName = actor["ResName"];
+                Fmdb = actor["Fmdb"];
+                InstanceHeapSize = actor["InstanceHeapSize"];
+                IsCalcNodePushBack = actor["IsCalcNodePushBack"];
+                IsFarActor = actor["IsFarActor"];
+                ModelAabbMax = actor["ModelAabbMax"];
+                ModelAabbMin = actor["ModelAabbMin"];
+                __RowId = actor["__RowId"];
             }
 
             public Actor()
             {
-                ClassName = "Gachihoko";
-                FmdbName = "Wsp_Shachihoko";
-                JmpName = "";
-                LinkUserName = "Gachihoko";
-                Name = "ScrambleBombFlower";
-                ParamsFileBaseName = "MapObj/ScrambleBombFlower";
-                ResJmpName = "";
-                ResName = "Wsp_Shachihoko";
+                CalcPriority = "After";
+                Category = "Obj";
+                ClassName = "SplActor";
+                Fmdb = "Work/Model/Weapon/Wsp_Shachihoko/output/Wsp_Shachihoko.fmdb";
+                InstanceHeapSize = 213176;
+                IsCalcNodePushBack = true;
+                IsFarActor = false;
+                ModelAabbMax: ( 0.40589f, 1.57011f, 0.83881f);
+                ModelAabbMin: ( -0.40585f, -0.00496f, -1.17535f);
+                __RowId: Gachihoko;
             }
         }
 

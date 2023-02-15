@@ -193,7 +193,7 @@ namespace SampleMapEditor
             Console.WriteLine("~ Called StageDefinition.Save(); ~");
             SaveMapObjList();
 
-            string bymlName = $"{stageName}.byaml";
+            string bymlName = $"{stageName}.byml";
             Console.WriteLine($"SARC File Name: {originalPath}");
             Console.WriteLine($"BYML File Name: {bymlName}");
 

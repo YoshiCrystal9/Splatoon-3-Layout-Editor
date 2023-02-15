@@ -43,7 +43,7 @@ namespace SampleMapEditor
         public Obj()
         {
             this.Layer = "Cmn";
-            this.Name = "Obj_GeneralBox_15x15x15_Blitz";
+            this.Name = "FldObj_GeneralBox_15x15x15_Blitz";
 
             this.Scale = new ByamlVector3F(1, 1, 1);
         }
