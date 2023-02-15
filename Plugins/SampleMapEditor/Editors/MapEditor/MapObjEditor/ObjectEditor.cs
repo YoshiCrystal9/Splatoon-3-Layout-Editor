@@ -371,7 +371,7 @@ namespace SampleMapEditor.LayoutEditor
             {
                 var obj = ((IRenderNode)render).UINode.Tag as Obj;
                 //var modelFilePath = Obj.FindFilePath(Obj.GetResourceName(obj.ObjId));
-                var modelFilePath = Obj.FindFilePath(Obj.GetResourceName(obj.UnitConfigName));
+                var modelFilePath = Obj.FindFilePath(Obj.GetResourceName(obj.Name));
                 if (!File.Exists(modelFilePath))
                     continue;
 
@@ -457,11 +457,11 @@ namespace SampleMapEditor.LayoutEditor
         //private EditableObject Create(Obj obj)
         private EditableObject Create(MuElement obj)
         {
-            Console.WriteLine($"Creating object with name: {obj.UnitConfigName}");
+            Console.WriteLine($"Creating object with name: {obj.Name}");
             string name = GetResourceName(obj);
             EditableObject render = new TransformableObject(Root);
 
-            var filePath = Obj.FindFilePath(Obj.GetResourceName(obj.UnitConfigName));
+            var filePath = Obj.FindFilePath(Obj.GetResourceName(obj.Name));
 
 
             //Don't load it for now if the model is already cached. It should load up instantly
@@ -508,10 +508,10 @@ namespace SampleMapEditor.LayoutEditor
             //Toggle models to use
             if (render is BfresRender)
             {
-                if (GlobalSettings.ActorDatabase.ContainsKey(obj.UnitConfigName))
+                if (GlobalSettings.ActorDatabase.ContainsKey(obj.Name))
                 {
                     //Obj requires specific model to display
-                    string modelName = GlobalSettings.ActorDatabase[obj.UnitConfigName].FmdbName; // ??? -
+                    string modelName = GlobalSettings.ActorDatabase[obj.Name].FmdbName; // ??? -
 #warning Not sure if Name should be changed to ResName or FmdbName
                     if (!string.IsNullOrEmpty(modelName))
                     {
@@ -763,8 +763,8 @@ namespace SampleMapEditor.LayoutEditor
                 if (skyboxRender != null)
                     return EditObject(skyboxRender, id);*/
             }
-            //var rend = Create(new Obj() { UnitConfigName = actorName}); // I think this is correct
-            /*var rend = Create(new MuElement() { UnitConfigName = actorName}); // I think this is correct -- Nope.
+            //var rend = Create(new Obj() { Name = actorName}); // I think this is correct
+            /*var rend = Create(new MuElement() { Name = actorName}); // I think this is correct -- Nope.
 #warning May need to cast to correct Actor Class type. Check later.*/
 
             //Get Actor Class Name
@@ -772,7 +772,7 @@ namespace SampleMapEditor.LayoutEditor
             Type elem = typeof(MuElement);
             ByamlSerialize.SetMapObjType(ref elem, className);
             var inst = (MuElement)Activator.CreateInstance(elem);
-            inst.UnitConfigName = actorName;
+            inst.Name = actorName;
             var rend = Create(inst);
 
             Add(rend, true);
@@ -813,7 +813,7 @@ namespace SampleMapEditor.LayoutEditor
             int index = render.UINode.Index;
             var obj = render.UINode.Tag as MuElement; // Obj;
             //obj.ObjId = id;
-            obj.UnitConfigName = actorName;
+            obj.Name = actorName;
 
             //Remove the previous renderer
             GLContext.ActiveContext.Scene.RemoveRenderObject(render);
@@ -862,8 +862,8 @@ namespace SampleMapEditor.LayoutEditor
             string name = "";
 
             //Use object database instead if exists
-            if (GlobalSettings.ActorDatabase.ContainsKey(obj.UnitConfigName))
-                name = GlobalSettings.ActorDatabase[obj.UnitConfigName].ResName;
+            if (GlobalSettings.ActorDatabase.ContainsKey(obj.Name))
+                name = GlobalSettings.ActorDatabase[obj.Name].ResName;
 
             return name;
         }
@@ -872,11 +872,11 @@ namespace SampleMapEditor.LayoutEditor
         private string GetNodeHeader(MuElement obj)
         {
             //string name = GlobalSettings.ObjectList.ContainsKey(obj.ObjId) ? $"{GlobalSettings.ObjectList[obj.ObjId]}" : obj.ObjId.ToString();
-            string name = obj.UnitConfigName;   //string name = "???";
+            string name = obj.Name;   //string name = "???";
             //Use object database instead if exists
-            if (GlobalSettings.ActorDatabase.ContainsKey(obj.UnitConfigName))
+            if (GlobalSettings.ActorDatabase.ContainsKey(obj.Name))
             {
-                name = GlobalSettings.ActorDatabase[obj.UnitConfigName].Name;
+                name = GlobalSettings.ActorDatabase[obj.Name].Name;
             }
 #warning ^^ Not sure if FmdbName is correct here. Check again later. -- Update: it wasn't. Name is correct.
 
@@ -943,7 +943,7 @@ namespace SampleMapEditor.LayoutEditor
                 foreach (EditableObjectNode ob in selected)
                 {
                     //int previousID = ((Obj)ob.Tag).ObjId;
-                    var previousID = ((Obj)ob.Tag).UnitConfigName;
+                    var previousID = ((Obj)ob.Tag).Name;
 
                     var render = EditObject(ob.Object, id);
                 }

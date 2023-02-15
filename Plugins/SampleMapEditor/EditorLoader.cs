@@ -135,7 +135,7 @@ namespace SampleMapEditor
         private void ParseActorDb()
         {
             //string mushPackPath = $"{PluginConfig.S2GamePath}/Pack/Mush.release.pack";
-            string mushPackPath = GetContentPath("Pack/Mush.release.pack");
+            string mushPackPath = GetContentPath("RSDB/ActorInfo.Product.200.rstbl.byml.zs");
             SARC mushSARC = new SARC();
 
             // Load Mush.release.pack
@@ -153,7 +153,7 @@ namespace SampleMapEditor
                     Console.WriteLine("Found ActorDb!");
                     if (Nisasyst.IsEncrypted(file.FileData))
                     {
-                        actorDbByml = Nisasyst.DecryptByaml((SARC.FileEntry)file);
+                        actorDbByml = ByamlFile.LoadN(new MemoryStream(file.AsBytes()));
                     }
                     else
                     {
@@ -176,27 +176,26 @@ namespace SampleMapEditor
 
 
         //
-        public string GetModelPathFromUnitConfigName(string name)
+        public string GetModelPathFromName(string name)
         {
             Actor actor = Actors.Find(x => x.Name == name);
             if (actor == null) return null;
             if (actor.ResName == "") return null;
-            //return $"{PluginConfig.S2GamePath}/Model/{actor.ResName}.Nin_NX_NVN.szs";
-            return GetContentPath($"Model/{actor.ResName}.Nin_NX_NVN.szs");
+            return GetContentPath($"Model/{actor.ResName}.bfres.zs");
         }
 
         public string GetModelPathFromObject(dynamic obj)
         {
-            return GetModelPathFromUnitConfigName(obj["UnitConfigName"]);
+            return GetModelPathFromName(obj["Name"]);
         }
 
         public Actor GetActorFromObj(dynamic obj)
         {
-            string ucName = obj["UnitConfigName"];
-            return GetActorFromUnitConfigName(ucName);
+            string ucName = obj["Name"];
+            return GetActorFromName(ucName);
         }
 
-        public Actor GetActorFromUnitConfigName(string name)
+        public Actor GetActorFromName(string name)
         {
             Actor actor = Actors.Find(x => x.Name == name);
             return actor;
@@ -224,7 +223,7 @@ namespace SampleMapEditor
             // Print out the name of each object that will be loaded
             foreach (var obj in lytByml.RootNode["Objs"])
             {
-                Console.WriteLine(obj["UnitConfigName"]);
+                Console.WriteLine(obj["Name"]);
                 float x = obj["Translate"]["X"];
                 float y = obj["Translate"]["Y"];
                 float z = obj["Translate"]["Z"];
@@ -235,7 +234,7 @@ namespace SampleMapEditor
             Console.WriteLine("Object list:");
             foreach (var obj in MapObjList)
             {
-                Console.WriteLine($"  Object name: {obj["UnitConfigName"]}");
+                Console.WriteLine($"  Object name: {obj["Name"]}");
             }
 
             // (TESTING) Load the first object in the list

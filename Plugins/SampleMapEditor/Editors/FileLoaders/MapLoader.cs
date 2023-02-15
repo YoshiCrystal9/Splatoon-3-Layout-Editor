@@ -52,9 +52,9 @@ namespace SampleMapEditor.LayoutEditor
             {
                 Id = "obj0",
                 //IsLinkDest = false,
-                LayerConfigName = "Cmn",
+                Layer = "Cmn",
                 Team = 0,
-                UnitConfigName = "RespawnPos",
+                Name = "RespawnPos",
                 Translate = new ByamlVector3F(-200f, 0f, -200f),
                 Scale = new ByamlVector3F(1f, 1f, 1f),
                 Rotate = new ByamlVector3F(0f, 0f, 0f),
@@ -67,9 +67,9 @@ namespace SampleMapEditor.LayoutEditor
             {
                 Id = "obj1",
                 //IsLinkDest = false,
-                LayerConfigName = "Cmn",
+                Layer = "Cmn",
                 Team = 1,
-                UnitConfigName = "RespawnPos",
+                Name = "RespawnPos",
                 Translate = new ByamlVector3F(200f, 0f, 200f),
                 Scale = new ByamlVector3F(1f, 1f, 1f),
                 Rotate = new ByamlVector3F(0f, 0f, 0f),

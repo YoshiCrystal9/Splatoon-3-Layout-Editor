@@ -19,7 +19,7 @@ namespace SampleMapEditor
         //public string[] Description => new string[] { "Byaml" };
         //public string[] Extension => new string[] { "*.byaml" };
         public string[] Description => new string[] { "Stage Layout Data" };
-        public string[] Extension => new string[] { "*.szs" };
+        public string[] Extension => new string[] { "*.zs" };
 
         /// <summary>
         /// Wether or not the file can be saved.
@@ -45,7 +45,7 @@ namespace SampleMapEditor
             //ImGui.Checkbox("Mario Kart 8 Deluxe Map", ref IsNewSwitch);
 
             //ImguiCustomWidgets.FileSelector("Model File", ref model_path, new string[] { ".dae", ".fbx" });
-            ImGui.Text("Splatoon 2 Stage Layout");
+            ImGui.Text("Splatoon 3 Stage Layout");
 
             var size = new System.Numerics.Vector2(ImGui.GetWindowWidth() / 2, 23);
             if (ImGui.Button(TranslationSource.GetText("CANCEL"), size))
@@ -67,7 +67,7 @@ namespace SampleMapEditor
         {
             //Just load maps from checking the byaml extension atm.
             //return fileInfo.Extension == ".byaml";
-            return fileInfo.Extension == ".szs" && !fileInfo.FileName.Contains("Nin_NX_NVN");
+            return fileInfo.Extension == ".zs";
         }
 
 
@@ -101,12 +101,12 @@ namespace SampleMapEditor
             MapLoader.Init(this);
 
             //Root.Header = "course_muunt.byaml";
-            Root.Header = "Fld_CustomStage01_Vss.byaml (HEADER)";
+            Root.Header = "Vss_CustomStage01.bcett.byml (HEADER)";
             Root.Tag = this;
 
             //FileInfo.FileName = "course_muunt.byaml";
             //FileInfo.FileName = "Fld_Test01_Vss.byaml";
-            FileInfo.FileName = "Fld_CustomStage01_Vss.szs";
+            FileInfo.FileName = "Vss_CustomStage.szs";
             FileInfo.Compression = new Yaz0();
 
             Setup(MapLoader);

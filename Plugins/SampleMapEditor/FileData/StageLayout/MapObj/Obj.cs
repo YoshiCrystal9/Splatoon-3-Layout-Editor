@@ -17,13 +17,13 @@ namespace SampleMapEditor
         public bool IsLinkDest { get; set; } = false;
         
         [ByamlMember]
-        public string LayerConfigName { get; set; }
+        public string Layer { get; set; }
 
         [ByamlMember]
         public string ModelName { get; set; } = "";
 
         [ByamlMember]
-        public string UnitConfigName { get; set; }
+        public string Name { get; set; }
 
         [ByamlMember]
         public List<LinkInfo> Links { get; set; } = new List<LinkInfo>();
@@ -42,8 +42,8 @@ namespace SampleMapEditor
         private static string GetNewObjId => $"obj{objcounter++}";*/
         public Obj()
         {
-            this.LayerConfigName = "Cmn";
-            this.UnitConfigName = "Obj_GeneralBox_15x15x15_Blitz";
+            this.Layer = "Cmn";
+            this.Name = "Obj_GeneralBox_15x15x15_Blitz";
 
             this.Scale = new ByamlVector3F(1, 1, 1);
         }
@@ -167,9 +167,9 @@ namespace SampleMapEditor
             return new Obj()
             {
                 // ~ Fill out once Obj is fully defined ~
-                UnitConfigName = this.UnitConfigName,
+                Name = this.Name,
                 IsLinkDest = this.IsLinkDest,
-                LayerConfigName = this.LayerConfigName,
+                Layer = this.Layer,
                 Translate = this.Translate,
                 Scale = this.Scale,
                 Rotate = this.Rotate,

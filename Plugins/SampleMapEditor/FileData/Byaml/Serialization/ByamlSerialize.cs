@@ -148,7 +148,7 @@ namespace SampleMapEditor
                     if (property.GetPropertyValue("Name").ToString() == "Objs")
                     {
                         string className = MuElement.GetActorClassName(list[j]);
-                        if (className.Length == 0) className = list[j]["UnitConfigName"];
+                        if (className.Length == 0) className = list[j]["Name"];
 
                         SetMapObjType(ref elementType, className);
 

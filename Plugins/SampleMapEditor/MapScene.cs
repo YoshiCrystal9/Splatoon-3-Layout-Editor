@@ -46,7 +46,7 @@ namespace SampleMapEditor
 
             foreach (var mapObj in loader.MapObjList)
             {
-                /*NodeBase objNode = new NodeBase(mapObj["UnitConfigName"]);
+                /*NodeBase objNode = new NodeBase(mapObj["Name"]);
                 objNode.Icon = IconManager.MESH_ICON.ToString();
                 objFolder.AddChild(objNode);*/
 
@@ -57,7 +57,7 @@ namespace SampleMapEditor
                     //SARC s = new SARC();
                     //s.Load(new MemoryStream(YAZ0.Decompress(modelPath)));
                     BfresRender o = new BfresRender(s.files.Find(f => f.FileName == "output.bfres").FileData, modelPath);
-                    //o.Models.ForEach(model => { if (model.Name != mapObj["UnitConfigName"]) { model.IsVisible = false; Console.WriteLine($"Hiding model: {model.Name}"); } });
+                    //o.Models.ForEach(model => { if (model.Name != mapObj["Name"]) { model.IsVisible = false; Console.WriteLine($"Hiding model: {model.Name}"); } });
 
                     o.Models.ForEach(model =>
                     {
@@ -98,7 +98,7 @@ namespace SampleMapEditor
                     }
 
                     objFolder.AddChild(o.UINode);
-                    o.UINode.Header = mapObj["UnitConfigName"];
+                    o.UINode.Header = mapObj["Name"];
                     o.UINode.Icon = IconManager.MESH_ICON.ToString();
                     o.Transform.Position = EditorLoader.GetObjPos(mapObj);
                     o.Transform.Scale = EditorLoader.GetObjScale(mapObj);
@@ -110,7 +110,7 @@ namespace SampleMapEditor
                 {
                     TransformableObject o = new TransformableObject(objFolder);
                     //CustomBoundingBoxRender o = new CustomBoundingBoxRender(objFolder);
-                    o.UINode.Header = mapObj["UnitConfigName"];
+                    o.UINode.Header = mapObj["Name"];
                     o.UINode.Icon = IconManager.MESH_ICON.ToString();
                     o.Transform.Position = EditorLoader.GetObjPos(mapObj);
                     o.Transform.Scale = EditorLoader.GetObjScale(mapObj);
@@ -133,7 +133,7 @@ namespace SampleMapEditor
                 //Vector3F pos = 
 
                 /*TransformableObject testOBJ = new TransformableObject(objFolder);
-                testOBJ.UINode.Header = mapObj["UnitConfigName"];
+                testOBJ.UINode.Header = mapObj["Name"];
                 testOBJ.UINode.Icon = IconManager.MESH_ICON.ToString();
                 testOBJ.Transform.Position = loader.GetObjPos(mapObj);
                 testOBJ.Transform.Scale = loader.GetObjScale(mapObj);
@@ -149,7 +149,7 @@ namespace SampleMapEditor
             //SARC s = new SARC();
             s.Load(new MemoryStream(YAZ0.Decompress(path)));
             BfresRender br = new BfresRender(s.files.Find(f => f.FileName == "output.bfres").FileData, path);
-            br.Models.ForEach(model => { if (model.Name != loader.MapObjList[i]["UnitConfigName"]) model.IsVisible = false; });
+            br.Models.ForEach(model => { if (model.Name != loader.MapObjList[i]["Name"]) model.IsVisible = false; });
             br.UINode.Header = "TESTING MODEL";
             br.UINode.Icon = IconManager.MESH_ICON.ToString();
             *//*br.Transform.Position = loader.GetObjPos(loader.MapObjList[i]);

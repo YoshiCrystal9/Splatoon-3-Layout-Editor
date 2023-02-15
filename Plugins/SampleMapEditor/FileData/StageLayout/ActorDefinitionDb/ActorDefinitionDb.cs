@@ -21,7 +21,7 @@ namespace SampleMapEditor
             {
                 byteOrder = Syroot.BinaryData.ByteOrder.LittleEndian,
                 SupportPaths = false,
-                Version = 3,
+                Version = 7,
             };
         }
 

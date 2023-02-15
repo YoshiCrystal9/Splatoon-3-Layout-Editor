@@ -20,8 +20,8 @@ namespace SampleMapEditor
         
         // TEST func
         //private FileInfo originalFileInfo => new FileInfo(originalPath);
-        private string stageName = "Fld_Custom01_Vss";
-        private string bymlFileName => originalPath != String.Empty ? new FileInfo(originalPath).Name + ".byaml" : "Fld_Custom01_Vss.byaml";
+        private string stageName = "Vss_Custom01";
+        private string bymlFileName => originalPath != String.Empty ? new FileInfo(originalPath).Name + ".bcett.byml" : "Vss_Custom01.bcett.byml";
 
         private BymlFileData BymlData;
 
@@ -157,8 +157,8 @@ namespace SampleMapEditor
                 }
             }*/
 
-            Objs?.ForEach(x => Console.WriteLine(x.UnitConfigName)); // [DEBUG] Log all object names
-            Rails?.ForEach(r => Console.WriteLine(r.UnitConfigName));
+            Objs?.ForEach(x => Console.WriteLine(x.Name)); // [DEBUG] Log all object names
+            Rails?.ForEach(r => Console.WriteLine(r.Name));
 
             for (int i = 0; i < Objs?.Count; i++)
             {
