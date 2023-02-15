@@ -52,9 +52,9 @@ namespace SampleMapEditor
 
         public static string GetContentPath(string relativePath)
         {
-            if (File.Exists($"{PluginConfig.S2ModPath}/{relativePath}")) return $"{PluginConfig.S2ModPath}/{relativePath}";
-            if (File.Exists($"{PluginConfig.S2AocPath}/{relativePath}")) return $"{PluginConfig.S2AocPath}/{relativePath}";
-            if (File.Exists($"{PluginConfig.S2GamePath}/{relativePath}")) return $"{PluginConfig.S2GamePath}/{relativePath}";
+            if (File.Exists($"{PluginConfig.S3ModPath}/{relativePath}")) return $"{PluginConfig.S3ModPath}/{relativePath}";
+            if (File.Exists($"{PluginConfig.S3AocPath}/{relativePath}")) return $"{PluginConfig.S3AocPath}/{relativePath}";
+            if (File.Exists($"{PluginConfig.S3GamePath}/{relativePath}")) return $"{PluginConfig.S3GamePath}/{relativePath}";
             return relativePath;
 
 
@@ -210,7 +210,7 @@ namespace SampleMapEditor
         /// </summary>
         public void Load(Stream stream)
         {
-            Console.WriteLine(PluginConfig.S2GamePath);
+            Console.WriteLine(PluginConfig.S3GamePath);
 
             ParseActorDb();
 
