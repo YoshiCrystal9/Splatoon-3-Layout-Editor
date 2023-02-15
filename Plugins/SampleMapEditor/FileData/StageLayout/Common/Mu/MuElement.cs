@@ -64,7 +64,7 @@ namespace SampleMapEditor
         public MuElement()
         {
             this.Layer = "Cmn";
-            this.Name = "Obj_GeneralBox_15x15x15_Blitz";
+            this.Name = "Lft_FldObj_GeneralBoxNoPaint_45x15x15_Blitz";
 
             this.Scale = new ByamlVector3F(1, 1, 1);
         }

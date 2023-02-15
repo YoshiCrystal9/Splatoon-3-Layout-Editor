@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Syroot.Maths;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,10 +16,8 @@ namespace SampleMapEditor
         [ByamlMember] public bool IsCalcNodePushBack { get; set; }
         [ByamlMember] public bool IsFarActor { get; set; }
         [ByamlMember] public bool IsNotTurnToActor { get; set; }
-
-        //BOTH NEEDS X Y Z
-        //[ByamlMember] public float ModelAabbMax { get; set; }
-        //[ByamlMember] public float ModelAabbMin { get; set; }
+        [ByamlMember] public Vector3F ModelAabbMax { get; set; }
+        [ByamlMember] public Vector3F ModelAabbMin { get; set; }
         [ByamlMember] public string __RowId { get; set; }
 
     }
