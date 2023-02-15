@@ -246,7 +246,7 @@ namespace CafeLibrary
                 br.ByteOrder = ByteOrder.BigEndian;
             br.BaseStream.Position = 0;
             if (br.ReadString(4) != "SARC")
-                throw new Exception("Wrong magic");
+                throw new Exception("Wrong magic"); //q coño pasa aqui
 
             br.ReadUInt16(); // Chunk length
             br.ReadUInt16(); // BOM

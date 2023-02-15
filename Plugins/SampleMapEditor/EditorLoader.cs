@@ -11,6 +11,8 @@ using ByamlExt.Byaml;
 using System.Collections.Generic;
 using CafeLibrary.Rendering;
 using Syroot.Maths;
+using Vector3 = OpenTK.Vector3;
+using Vector2 = OpenTK.Vector2;
 
 namespace SampleMapEditor
 {
@@ -84,8 +86,8 @@ namespace SampleMapEditor
             public bool IsCalcNodePushBack { get; set; }
             public bool IsFarActor { get; set; }
             public bool IsNotTurnToActor { get; set; }
-            public Vector3F ModelAabbMax { get; set; }
-            public Vector3F ModelAabbMin { get; set; }
+            public float ModelAabbMax { get; set; }
+            public float ModelAabbMin { get; set; }
             public string __RowId { get; set; }
 
 
@@ -112,8 +114,8 @@ namespace SampleMapEditor
                 InstanceHeapSize = 213176;
                 IsCalcNodePushBack = true;
                 IsFarActor = false;
-                ModelAabbMax = (0.40589f, 1.57011f, 0.83881f);
-                ModelAabbMin = (-0.40585f, -0.00496f, -1.17535f);
+                //ModelAabbMax = (0.40589f, 1.57011f, 0.83881f);
+                //ModelAabbMin = (-0.40585f, -0.00496f, -1.17535f);
                 __RowId = "Gachihoko";
             }
         }
@@ -186,10 +188,10 @@ namespace SampleMapEditor
         //
         public string GetModelPathFromName(string name)
         {
-            Actor actor = Actors.Find(x => x.Name == name);
+            Actor actor = Actors.Find(x => x.__RowId == name);
             if (actor == null) return null;
-            if (actor.ResName == "") return null;
-            return GetContentPath($"Model/{actor.ResName}.bfres.zs");
+            if (actor.Fmdb == "") return null;
+            return GetContentPath($"Model/{actor.Fmdb}.bfres.zs");
         }
 
         public string GetModelPathFromObject(dynamic obj)
@@ -205,7 +207,7 @@ namespace SampleMapEditor
 
         public Actor GetActorFromName(string name)
         {
-            Actor actor = Actors.Find(x => x.Name == name);
+            Actor actor = Actors.Find(x => x.__RowId == name);
             return actor;
         }
 
