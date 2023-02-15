@@ -77,7 +77,7 @@ namespace SampleMapEditor.LayoutEditor
 
             var addMenu = new MenuItemModel("ADD_OBJECT", AddObjectMenuAction);
             var commonItemsMenu = new MenuItemModel("OBJECTS");
-            commonItemsMenu.MenuItems.Add(new MenuItemModel("SPAWNPOINT", () => AddObject("RespawnPos", true)));
+            commonItemsMenu.MenuItems.Add(new MenuItemModel("SPAWNPOINT", () => AddObject("Obj_RespawnPos", true)));
 
             GLContext.ActiveContext.Scene.MenuItemsAdd.Add(addMenu);
             GLContext.ActiveContext.Scene.MenuItemsAdd.Add(commonItemsMenu);
