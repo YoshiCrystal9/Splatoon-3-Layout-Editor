@@ -53,8 +53,7 @@ namespace SampleMapEditor
         {
             Console.WriteLine("~ Called GlobalSettings.LoadActorDb() ~");
             // Find the Mush pack and load it
-            string path = GetContentPath($"Pack/Actor/");
-            Console.WriteLine($"\"{path}\"");
+            string path = GetContentPath($"Pack/Mush.release.pack");
             /*if (!File.Exists(path))
                 return;*/
 

@@ -154,7 +154,7 @@ namespace SampleMapEditor.LayoutEditor
             {
                 var mapObject = objects[line_i];
                 //string resName = mapObject.ResNames.FirstOrDefault();
-                string resName = mapObject.Name;
+                string resName = mapObject.ResName;
 
                 //Get the icon
                 var icon = IconManager.GetTextureIcon("Node");

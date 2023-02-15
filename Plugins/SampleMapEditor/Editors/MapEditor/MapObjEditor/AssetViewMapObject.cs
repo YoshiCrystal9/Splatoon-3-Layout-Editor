@@ -32,7 +32,7 @@ namespace SampleMapEditor.LayoutEditor
 
         public void AddAsset(List<AssetItem> assets, ActorDefinition actor)
         {
-            string resName = actor.Name;
+            string resName = actor.ResName;
             
             /*string icon = "Node";
             if (IconManager.HasIcon($"{Runtime.ExecutableDir}/Lib/Images/MapObjects/{resName}.png"))
@@ -83,7 +83,7 @@ namespace SampleMapEditor.LayoutEditor
         {
             get
             {
-                if (AssetViewMapObject.filterObjPath && ActorDefinition.Name.Length == 0)
+                if (AssetViewMapObject.filterObjPath && ActorDefinition.FmdbName.Length == 0)
                     return false;
 
                 return true;

@@ -103,7 +103,7 @@ namespace SampleMapEditor
                 Console.WriteLine($"{file.FileName} {(Nisasyst.IsEncrypted(file.FileData) ? "is" : "is not")} Nisasyst encrypted.");    // DEBUG PRINT
             }
 
-            if (BymlData == null) { Console.WriteLine("Failed to find ActorDb! I WANTT O DIE"); return; }
+            if (BymlData == null) { Console.WriteLine("Failed to find ActorDb!"); return; }
 
             ByamlSerialize.Deserialize(this, BymlData.RootNode);
 

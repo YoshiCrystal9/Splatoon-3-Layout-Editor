@@ -25,28 +25,28 @@ namespace SampleMapEditor
         public static string GamePath = "";*/
 
         [JsonProperty]
-        public static string S3GamePath = "";
+        public static string S2GamePath = "";
 
         [JsonProperty]
-        public static string S3AocPath = "";
+        public static string S2AocPath = "";
 
         [JsonProperty]
-        public static string S3ModPath = "";
+        public static string S2ModPath = "";
 
         /// <summary>
         /// Renders the current configuration UI.
         /// </summary>
         public void DrawUI()
         {
-            if (ImguiCustomWidgets.PathSelector("Splatoon 3", ref S3GamePath))
+            if (ImguiCustomWidgets.PathSelector("Splatoon 2", ref S2GamePath))
             {
                 Save();
             }
-            if (ImguiCustomWidgets.PathSelector("Splatoon 3: Octo Expansion", ref S3AocPath))
+            if (ImguiCustomWidgets.PathSelector("Splatoon 2: Octo Expansion", ref S2AocPath))
             {
                 Save();
             }
-            if (ImguiCustomWidgets.PathSelector("Splatoon 3 Mod Path", ref S3ModPath))
+            if (ImguiCustomWidgets.PathSelector("Splatoon 2 Mod Path", ref S2ModPath))
             {
                 Save();
             }
@@ -79,9 +79,9 @@ namespace SampleMapEditor
         /// </summary>
         public void Reload()
         {
-            GlobalSettings.GamePath = S3GamePath;
-            GlobalSettings.AOCPath = S3AocPath;
-            GlobalSettings.ModOutputPath = S3ModPath;
+            GlobalSettings.GamePath = S2GamePath;
+            GlobalSettings.AOCPath = S2AocPath;
+            GlobalSettings.ModOutputPath = S2ModPath;
         }
     }
 }

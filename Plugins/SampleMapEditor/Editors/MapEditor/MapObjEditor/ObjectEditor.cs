@@ -35,7 +35,7 @@ namespace SampleMapEditor.LayoutEditor
         public List<MenuItemModel> MenuItems { get; set; } = new List<MenuItemModel>();
 
         //int SpawnObjectID = 1018;
-        string SpawnObjectName = "Obj_RespawnPos";
+        string SpawnObjectName = "RespawnPos";
 
         public List<NodeBase> GetSelected()
         {
@@ -77,7 +77,7 @@ namespace SampleMapEditor.LayoutEditor
 
             var addMenu = new MenuItemModel("ADD_OBJECT", AddObjectMenuAction);
             var commonItemsMenu = new MenuItemModel("OBJECTS");
-            commonItemsMenu.MenuItems.Add(new MenuItemModel("SPAWNPOINT", () => AddObject("Obj_RespawnPos", true)));
+            commonItemsMenu.MenuItems.Add(new MenuItemModel("SPAWNPOINT", () => AddObject("RespawnPos", true)));
 
             GLContext.ActiveContext.Scene.MenuItemsAdd.Add(addMenu);
             GLContext.ActiveContext.Scene.MenuItemsAdd.Add(commonItemsMenu);
@@ -435,33 +435,33 @@ namespace SampleMapEditor.LayoutEditor
 
 
 
-        //private void LoadDeliTextures(ref EditableObject render)
-        //{
-        //    if (render is BfresRender)
-        //    {
-        //        Console.WriteLine("Loading DeliTextures!");
-        //        var deliTex_sarc = new SARC();
-        //        string dtpath = EditorLoader.GetContentPath("Model/DeliTextures.Nin_NX_NVN.szs");
-        //        SARC s = new SARC();
-        //        s.Load(new MemoryStream(YAZ0.Decompress(dtpath)));
-        //        BfresRender dt_bfres = new BfresRender(s.files.Find(f => f.FileName == "output.bfres").FileData, dtpath);
-        //        for (int i = 0; i < dt_bfres.Textures.Count; i++)
-        //        {
-        //            ((BfresRender)render).Textures.Add(dt_bfres.Textures.Keys.ElementAt(i), dt_bfres.Textures.Values.ElementAt(i));
-        //        }
-        //    }
-        //} UNUSED
+        private void LoadDeliTextures(ref EditableObject render)
+        {
+            if (render is BfresRender)
+            {
+                Console.WriteLine("Loading DeliTextures!");
+                var deliTex_sarc = new SARC();
+                string dtpath = EditorLoader.GetContentPath("Model/DeliTextures.Nin_NX_NVN.szs");
+                SARC s = new SARC();
+                s.Load(new MemoryStream(YAZ0.Decompress(dtpath)));
+                BfresRender dt_bfres = new BfresRender(s.files.Find(f => f.FileName == "output.bfres").FileData, dtpath);
+                for (int i = 0; i < dt_bfres.Textures.Count; i++)
+                {
+                    ((BfresRender)render).Textures.Add(dt_bfres.Textures.Keys.ElementAt(i), dt_bfres.Textures.Values.ElementAt(i));
+                }
+            }
+        }
 
 
 
         //private EditableObject Create(Obj obj)
         private EditableObject Create(MuElement obj)
         {
-            Console.WriteLine($"Creating object with name: {obj.Name}");
+            Console.WriteLine($"Creating object with name: {obj.UnitConfigName}");
             string name = GetResourceName(obj);
             EditableObject render = new TransformableObject(Root);
 
-            var filePath = Obj.FindFilePath(Obj.GetResourceName(obj.Name));
+            var filePath = Obj.FindFilePath(Obj.GetResourceName(obj.UnitConfigName));
 
 
             //Don't load it for now if the model is already cached. It should load up instantly
@@ -491,10 +491,10 @@ namespace SampleMapEditor.LayoutEditor
                     render = new BfresRender(bfres.FileData, filePath, Root);
                     
                     // Apply DeliTextures to Shifty Stations
-                    //if (name.StartsWith("Fld_Deli_Octa"))
-                    //{
-                    //    LoadDeliTextures(ref render);
-                    //}
+                    if (name.StartsWith("Fld_Deli_Octa"))
+                    {
+                        LoadDeliTextures(ref render);
+                    }
                 }
 
                 //render = new BfresRender(filePath, Root);
@@ -508,10 +508,10 @@ namespace SampleMapEditor.LayoutEditor
             //Toggle models to use
             if (render is BfresRender)
             {
-                if (GlobalSettings.ActorDatabase.ContainsKey(obj.Name))
+                if (GlobalSettings.ActorDatabase.ContainsKey(obj.UnitConfigName))
                 {
                     //Obj requires specific model to display
-                    string modelName = GlobalSettings.ActorDatabase[obj.Name].Name; // ??? -
+                    string modelName = GlobalSettings.ActorDatabase[obj.UnitConfigName].FmdbName; // ??? -
 #warning Not sure if Name should be changed to ResName or FmdbName
                     if (!string.IsNullOrEmpty(modelName))
                     {
@@ -768,11 +768,11 @@ namespace SampleMapEditor.LayoutEditor
 #warning May need to cast to correct Actor Class type. Check later.*/
 
             //Get Actor Class Name
-            string className = GlobalSettings.ActorDatabase[actorName].Name;
+            string className = GlobalSettings.ActorDatabase[actorName].ClassName;
             Type elem = typeof(MuElement);
             ByamlSerialize.SetMapObjType(ref elem, className);
             var inst = (MuElement)Activator.CreateInstance(elem);
-            inst.Name = actorName;
+            inst.UnitConfigName = actorName;
             var rend = Create(inst);
 
             Add(rend, true);
@@ -813,7 +813,7 @@ namespace SampleMapEditor.LayoutEditor
             int index = render.UINode.Index;
             var obj = render.UINode.Tag as MuElement; // Obj;
             //obj.ObjId = id;
-            obj.Name = actorName;
+            obj.UnitConfigName = actorName;
 
             //Remove the previous renderer
             GLContext.ActiveContext.Scene.RemoveRenderObject(render);
@@ -862,8 +862,8 @@ namespace SampleMapEditor.LayoutEditor
             string name = "";
 
             //Use object database instead if exists
-            if (GlobalSettings.ActorDatabase.ContainsKey(obj.Name))
-                name = GlobalSettings.ActorDatabase[obj.Name].Name;
+            if (GlobalSettings.ActorDatabase.ContainsKey(obj.UnitConfigName))
+                name = GlobalSettings.ActorDatabase[obj.UnitConfigName].ResName;
 
             return name;
         }
@@ -872,11 +872,11 @@ namespace SampleMapEditor.LayoutEditor
         private string GetNodeHeader(MuElement obj)
         {
             //string name = GlobalSettings.ObjectList.ContainsKey(obj.ObjId) ? $"{GlobalSettings.ObjectList[obj.ObjId]}" : obj.ObjId.ToString();
-            string name = obj.Name;   //string name = "???";
+            string name = obj.UnitConfigName;   //string name = "???";
             //Use object database instead if exists
-            if (GlobalSettings.ActorDatabase.ContainsKey(obj.Name))
+            if (GlobalSettings.ActorDatabase.ContainsKey(obj.UnitConfigName))
             {
-                name = GlobalSettings.ActorDatabase[obj.Name].Name;
+                name = GlobalSettings.ActorDatabase[obj.UnitConfigName].Name;
             }
 #warning ^^ Not sure if FmdbName is correct here. Check again later. -- Update: it wasn't. Name is correct.
 

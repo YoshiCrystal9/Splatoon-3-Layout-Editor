@@ -52,9 +52,9 @@ namespace SampleMapEditor
 
         public static string GetContentPath(string relativePath)
         {
-            if (File.Exists($"{PluginConfig.S3ModPath}/{relativePath}")) return $"{PluginConfig.S3ModPath}/{relativePath}";
-            if (File.Exists($"{PluginConfig.S3AocPath}/{relativePath}")) return $"{PluginConfig.S3AocPath}/{relativePath}";
-            if (File.Exists($"{PluginConfig.S3GamePath}/{relativePath}")) return $"{PluginConfig.S3GamePath}/{relativePath}";
+            if (File.Exists($"{PluginConfig.S2ModPath}/{relativePath}")) return $"{PluginConfig.S2ModPath}/{relativePath}";
+            if (File.Exists($"{PluginConfig.S2AocPath}/{relativePath}")) return $"{PluginConfig.S2AocPath}/{relativePath}";
+            if (File.Exists($"{PluginConfig.S2GamePath}/{relativePath}")) return $"{PluginConfig.S2GamePath}/{relativePath}";
             return relativePath;
 
 
@@ -75,17 +75,38 @@ namespace SampleMapEditor
 
         public class Actor
         {
+            public string ClassName { get; set; }
+            public string FmdbName { get; set; }
+            public string JmpName { get; set; }
+            public string LinkUserName { get; set; }
             public string Name { get; set; }
+            public string ParamsFileBaseName { get; set; }
+            public string ResJmpName { get; set; }
+            public string ResName { get; set; }
 
 
             public Actor(dynamic actor)
             {
+                ClassName = actor["ClassName"];
+                FmdbName = actor["FmdbName"];
+                JmpName = actor["JmpName"];
+                LinkUserName = actor["LinkUserName"];
                 Name = actor["Name"];
+                ParamsFileBaseName = actor["ParamsFileBaseName"];
+                try { ResJmpName = actor["ResJmpName"]; } catch { } //ResJmpName = actor["ResJmpName"];
+                ResName = actor["ResName"];
             }
 
             public Actor()
             {
+                ClassName = "Gachihoko";
+                FmdbName = "Wsp_Shachihoko";
+                JmpName = "";
+                LinkUserName = "Gachihoko";
                 Name = "ScrambleBombFlower";
+                ParamsFileBaseName = "MapObj/ScrambleBombFlower";
+                ResJmpName = "";
+                ResName = "Wsp_Shachihoko";
             }
         }
 
@@ -110,23 +131,47 @@ namespace SampleMapEditor
             return new Vector3(t["X"], t["Y"], t["Z"]);
         }
 
-        private const string RelativePath = "Pack/Actor/";
 
         private void ParseActorDb()
         {
             //string mushPackPath = $"{PluginConfig.S2GamePath}/Pack/Mush.release.pack";
-            string ActorsPath = GetContentPath(RelativePath);
-            string[] ActorFiles = Directory.GetFiles(ActorsPath);
+            string mushPackPath = GetContentPath("Pack/Mush.release.pack");
+            SARC mushSARC = new SARC();
 
-            if (ActorFiles == null) return;
-
-            foreach (string ActorsNames in ActorFiles)
+            // Load Mush.release.pack
+            using (FileReader r = new FileReader(mushPackPath))
             {
-                Actors.Add(new Actor(ActorsNames));
-                Console.WriteLine(ActorsNames);
+                mushSARC.Load(r.BaseStream);
             }
 
-            Console.WriteLine("Finished loading Actors.");
+            // Find ActorDb
+            BymlFileData actorDbByml = new BymlFileData();
+            foreach (var file in mushSARC.Files)
+            {
+                if (file.FileName.Contains("ActorDb"))
+                {
+                    Console.WriteLine("Found ActorDb!");
+                    if (Nisasyst.IsEncrypted(file.FileData))
+                    {
+                        actorDbByml = Nisasyst.DecryptByaml((SARC.FileEntry)file);
+                    }
+                    else
+                    {
+                        actorDbByml = ByamlFile.LoadN(new MemoryStream(file.AsBytes()));
+                    }
+                }
+                Console.WriteLine($"{file.FileName} {(Nisasyst.IsEncrypted(file.FileData) ? "is" : "is not")} Nisasyst encrypted.");
+            }
+
+            if (actorDbByml == null) return;
+
+            foreach (var node in actorDbByml.RootNode)
+            {
+                Actors.Add(new Actor(node));
+                //Console.WriteLine(node["Name"]);
+            }
+
+            Console.WriteLine("Finished loading ActorDb.");
         }
 
 
@@ -135,19 +180,19 @@ namespace SampleMapEditor
         {
             Actor actor = Actors.Find(x => x.Name == name);
             if (actor == null) return null;
-            //if (actor.ResName == "") return null;
+            if (actor.ResName == "") return null;
             //return $"{PluginConfig.S2GamePath}/Model/{actor.ResName}.Nin_NX_NVN.szs";
-            return GetContentPath($"Model/{actor}.szs");
+            return GetContentPath($"Model/{actor.ResName}.Nin_NX_NVN.szs");
         }
 
         public string GetModelPathFromObject(dynamic obj)
         {
-            return GetModelPathFromUnitConfigName(obj["Name"]);
+            return GetModelPathFromUnitConfigName(obj["UnitConfigName"]);
         }
 
         public Actor GetActorFromObj(dynamic obj)
         {
-            string ucName = obj["Name"];
+            string ucName = obj["UnitConfigName"];
             return GetActorFromUnitConfigName(ucName);
         }
 
@@ -165,7 +210,7 @@ namespace SampleMapEditor
         /// </summary>
         public void Load(Stream stream)
         {
-            Console.WriteLine(PluginConfig.S3GamePath);
+            Console.WriteLine(PluginConfig.S2GamePath);
 
             ParseActorDb();
 
@@ -177,9 +222,9 @@ namespace SampleMapEditor
             MapObjList.Clear();
 
             // Print out the name of each object that will be loaded
-            foreach (var obj in lytByml.RootNode["Actors"])
+            foreach (var obj in lytByml.RootNode["Objs"])
             {
-                Console.WriteLine(obj["Name"]);
+                Console.WriteLine(obj["UnitConfigName"]);
                 float x = obj["Translate"]["X"];
                 float y = obj["Translate"]["Y"];
                 float z = obj["Translate"]["Z"];
@@ -187,10 +232,10 @@ namespace SampleMapEditor
                 MapObjList.Add(obj);
             }
 
-            Console.WriteLine("Actors list:");
+            Console.WriteLine("Object list:");
             foreach (var obj in MapObjList)
             {
-                Console.WriteLine($"  Actors name: {obj["Name"]}");
+                Console.WriteLine($"  Object name: {obj["UnitConfigName"]}");
             }
 
             // (TESTING) Load the first object in the list

@@ -11,12 +11,12 @@ namespace SampleMapEditor.LayoutEditor
 {
     public class RailPathToolSettings : IToolWindowDrawer
     {
-        //RailEditor Editor;
+        RailEditor Editor;
 
-       /* public RailPathToolSettings(RailEditor editor)
+        public RailPathToolSettings(RailEditor editor)
         {
             Editor = editor;
-        }*/
+        }
 
         public void Render()
         {

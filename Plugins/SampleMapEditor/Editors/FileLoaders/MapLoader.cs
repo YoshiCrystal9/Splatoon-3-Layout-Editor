@@ -52,9 +52,9 @@ namespace SampleMapEditor.LayoutEditor
             {
                 Id = "obj0",
                 //IsLinkDest = false,
-                Layer = "Cmn",
-                TeamCmp = 0,
-                Name = "Obj_RespawnPos",
+                LayerConfigName = "Cmn",
+                Team = 0,
+                UnitConfigName = "RespawnPos",
                 Translate = new ByamlVector3F(-200f, 0f, -200f),
                 Scale = new ByamlVector3F(1f, 1f, 1f),
                 Rotate = new ByamlVector3F(0f, 0f, 0f),
@@ -67,9 +67,9 @@ namespace SampleMapEditor.LayoutEditor
             {
                 Id = "obj1",
                 //IsLinkDest = false,
-                Layer = "Cmn",
-                TeamCmp = 1,
-                Name = "Obj_RespawnPos",
+                LayerConfigName = "Cmn",
+                Team = 1,
+                UnitConfigName = "RespawnPos",
                 Translate = new ByamlVector3F(200f, 0f, 200f),
                 Scale = new ByamlVector3F(1f, 1f, 1f),
                 Rotate = new ByamlVector3F(0f, 0f, 0f),
@@ -103,7 +103,7 @@ namespace SampleMapEditor.LayoutEditor
             if (!File.Exists(filePath))
                 return;
 
-            ProcessLoading.Instance.Update(15, 100, "Loading Stage Layout Byml");
+            ProcessLoading.Instance.Update(15, 100, "Loading Stage Layout Byaml");
 
             stageDefinition = new StageDefinition(filePath);
 
