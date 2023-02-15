@@ -112,8 +112,8 @@ namespace SampleMapEditor
                 InstanceHeapSize = 213176;
                 IsCalcNodePushBack = true;
                 IsFarActor = false;
-                ModelAabbMax = ( 0.40589f, 1.57011f, 0.83881f);
-                ModelAabbMin = ( -0.40585f, -0.00496f, -1.17535f);
+                ModelAabbMax = (0.40589f, 1.57011f, 0.83881f);
+                ModelAabbMin = (-0.40585f, -0.00496f, -1.17535f);
                 __RowId = "Gachihoko";
             }
         }

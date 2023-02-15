@@ -17,8 +17,8 @@ namespace SampleMapEditor
         [ByamlMember] public bool IsCalcNodePushBack { get; set; }
         [ByamlMember] public bool IsFarActor { get; set; }
         [ByamlMember] public bool IsNotTurnToActor { get; set; }
-        [ByamlMember] public Vector3F ModelAabbMax { get; set; }
-        [ByamlMember] public Vector3F ModelAabbMin { get; set; }
+        [ByamlMember] public ByamlVector3F ModelAabbMax { get; set; }
+        [ByamlMember] public ByamlVector3F ModelAabbMin { get; set; }
         [ByamlMember] public string __RowId { get; set; }
     }
 }
