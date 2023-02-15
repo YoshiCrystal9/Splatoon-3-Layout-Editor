@@ -15,7 +15,7 @@ namespace SampleMapEditor
     /// </summary>
     public class Plugin : IPlugin
     {
-        public string Name => "Sample Map Editor";
+        public string Name => "Splatoon 3 Map Editor";
 
         public Plugin()
         {
