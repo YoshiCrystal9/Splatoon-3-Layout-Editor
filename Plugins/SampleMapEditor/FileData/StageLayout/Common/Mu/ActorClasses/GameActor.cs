@@ -11,6 +11,7 @@ namespace SampleMapEditor
     {
         [ByamlMember] public string CalcPriority { get; set; }
         [ByamlMember] public string Category { get; set; }
+        [ByamlMember] public string ClassName { get; set; }
         [ByamlMember] public string Fmdb { get; set; }
         [ByamlMember] public int InstanceHeapSize { get; set; }
         [ByamlMember] public bool IsCalcNodePushBack { get; set; }
