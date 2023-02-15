@@ -7,6 +7,10 @@ using GLFrameworkEngine;
 using OpenTK;
 using Toolbox.Core.ViewModels;
 using MapStudio.UI;
+using CafeLibrary.Rendering;
+using CafeLibrary;
+using Toolbox.Core.IO;
+using System.IO;
 
 namespace SampleMapEditor
 {
@@ -42,21 +46,28 @@ namespace SampleMapEditor
 
             foreach (var mapObj in loader.MapObjList)
             {
+                /*NodeBase objNode = new NodeBase(mapObj["UnitConfigName"]);
+                objNode.Icon = IconManager.MESH_ICON.ToString();
+                objFolder.AddChild(objNode);*/
 
                 string modelPath = loader.GetModelPathFromObject(mapObj);
 
                 if (File.Exists(modelPath) && HasModel(modelPath, out SARC s))
                 {
+                    //SARC s = new SARC();
+                    //s.Load(new MemoryStream(YAZ0.Decompress(modelPath)));
                     BfresRender o = new BfresRender(s.files.Find(f => f.FileName == "output.bfres").FileData, modelPath);
+                    //o.Models.ForEach(model => { if (model.Name != mapObj["UnitConfigName"]) { model.IsVisible = false; Console.WriteLine($"Hiding model: {model.Name}"); } });
 
                     o.Models.ForEach(model =>
                     {
                         bool state = true;
                         if (model.Name != loader.GetActorFromObj(mapObj).FmdbName)
                         {
+                            //model.IsVisible = false;
+                            //Console.WriteLine($"Hiding model: {model.Name}");
                             state = false;
-                            if (model.Name.StartsWith("Fld_") &&
-                                model.Name.EndsWith("_DV")) //!(model.Name.EndsWith("_Map") || model.Name.EndsWith("_drcmap"))))
+                            if (model.Name.StartsWith("Fld_") && model.Name.EndsWith("_DV")) //!(model.Name.EndsWith("_Map") || model.Name.EndsWith("_drcmap"))))
                             {
                                 state = true;
                             }
@@ -69,8 +80,10 @@ namespace SampleMapEditor
                         }
                     });
 
-                    /*  UNUSED ON SPLATOON 3
-                     * string fmdbname = loader.GetActorFromObj(mapObj).FmdbName;
+                    //loader.GetActorFromObj(mapObj).FmdbName
+                    //loader.Actors.Find(x => x.FmdbName == )
+
+                    string fmdbname = loader.GetActorFromObj(mapObj).FmdbName;
                     if (fmdbname.StartsWith("Fld_Deli_"))
                     {
                         Console.WriteLine("Loading DeliTextures!");
@@ -82,10 +95,10 @@ namespace SampleMapEditor
                         {
                             o.Textures.Add(dt_bfres.Textures.Keys.ElementAt(i), dt_bfres.Textures.Values.ElementAt(i));
                         }
-                    }*/
+                    }
 
                     objFolder.AddChild(o.UINode);
-                    o.UINode.Header = mapObj["Name"];
+                    o.UINode.Header = mapObj["UnitConfigName"];
                     o.UINode.Icon = IconManager.MESH_ICON.ToString();
                     o.Transform.Position = EditorLoader.GetObjPos(mapObj);
                     o.Transform.Scale = EditorLoader.GetObjScale(mapObj);
@@ -97,18 +110,65 @@ namespace SampleMapEditor
                 {
                     TransformableObject o = new TransformableObject(objFolder);
                     //CustomBoundingBoxRender o = new CustomBoundingBoxRender(objFolder);
-                    o.UINode.Header = mapObj["Name"];
+                    o.UINode.Header = mapObj["UnitConfigName"];
                     o.UINode.Icon = IconManager.MESH_ICON.ToString();
                     o.Transform.Position = EditorLoader.GetObjPos(mapObj);
                     o.Transform.Scale = EditorLoader.GetObjScale(mapObj);
                     o.Transform.RotationEulerDegrees = EditorLoader.GetObjRotation(mapObj);
                     //o.Color = new Vector4(0.5F, 0.5F, 0.5F, 0.5F);
                     o.Transform.UpdateMatrix(true);
+                    loader.AddRender(o);
+
+
+                    //var min = o.Boundings.Box.Min;
+                    //var max = o.Boundings.Box.Max;
+
+                    //BoundingBoxRender bbox = new BoundingBoxRender(min, max);
+                    
+                    //loader.AddRender(o);
                 }
+
+
+
+                //Vector3F pos = 
+
+                /*TransformableObject testOBJ = new TransformableObject(objFolder);
+                testOBJ.UINode.Header = mapObj["UnitConfigName"];
+                testOBJ.UINode.Icon = IconManager.MESH_ICON.ToString();
+                testOBJ.Transform.Position = loader.GetObjPos(mapObj);
+                testOBJ.Transform.Scale = loader.GetObjScale(mapObj);
+                testOBJ.Transform.RotationEulerDegrees = loader.GetObjRotation(mapObj);
+                testOBJ.Transform.UpdateMatrix(true);
+                loader.AddRender(testOBJ);*/
+                
             }
 
+            /*//Console.WriteLine("Attempt to load model...");
+            int i = 0;
+            string path = loader.GetModelPathFromObject(loader.MapObjList[i]);
+            //SARC s = new SARC();
+            s.Load(new MemoryStream(YAZ0.Decompress(path)));
+            BfresRender br = new BfresRender(s.files.Find(f => f.FileName == "output.bfres").FileData, path);
+            br.Models.ForEach(model => { if (model.Name != loader.MapObjList[i]["UnitConfigName"]) model.IsVisible = false; });
+            br.UINode.Header = "TESTING MODEL";
+            br.UINode.Icon = IconManager.MESH_ICON.ToString();
+            *//*br.Transform.Position = loader.GetObjPos(loader.MapObjList[i]);
+            br.Transform.Scale = loader.GetObjScale(loader.MapObjList[i]);
+            br.Transform.RotationEuler = loader.GetObjRotation(loader.MapObjList[i]);*//*
+            br.Transform.Position = EditorLoader.GetObjPos(loader.MapObjList[i]);
+            br.Transform.Scale = EditorLoader.GetObjScale(loader.MapObjList[i]);
+            br.Transform.RotationEulerDegrees = EditorLoader.GetObjRotation(loader.MapObjList[i]);
+
+            br.Transform.UpdateMatrix(true);
+            loader.AddRender(br);*/
+
+            //loader.model1.Root.Children[0].
+            //CafeLibrary.FMDL fmdl = loader.model1.ModelFolder.Models[0];
+            //loader.AddRender(fmdl.BfresWrapper.Renderer);
+            //loader.AddRender(loader.model1.Root.Children[0].);
+
             //A folder to represent in the outliner UI
-            NodeBase folder = new NodeBase("Actors");
+            NodeBase folder = new NodeBase("Objects");
             //Allow toggling visibility for the folder
             folder.HasCheckBox = true;
             //Add it to the root of our loader
@@ -122,7 +182,7 @@ namespace SampleMapEditor
             //You give it the folder you want to parent in the tree or make it null to not be present.
             TransformableObject obj = new TransformableObject(folder);
             //Name
-            obj.UINode.Header = "Object1";
+            obj.UINode.Header = "Object1 lmao";
             obj.UINode.Icon = IconManager.MESH_ICON.ToString();
             //Give it a transform in the scene
             obj.Transform.Position = new Vector3(0, 10, 0);
@@ -132,7 +192,7 @@ namespace SampleMapEditor
             obj.Transform.UpdateMatrix(true);
 
             //Lastly add your object to the scene
-            loader.AddRender(obj);
+            //loader.AddRender(obj);
 
             //Custom renderer
             CustomRender renderer = new CustomRender(folder);
@@ -141,7 +201,7 @@ namespace SampleMapEditor
             renderer.Transform.Position = new Vector3(-100, 0, 0);
             renderer.Transform.Scale = new Vector3(2.5f);
             renderer.Transform.UpdateMatrix(true);
-            loader.AddRender(renderer);
+            //loader.AddRender(renderer);
         }
 
         /// <summary>

@@ -13,10 +13,6 @@ namespace Toolbox.Core.Imaging
             return false;
         }
 
-        public bool IsSupportedPlatform() {
-            return true;
-        }
-
         /// Convert a 4-bit color component to 8 bit
         private static byte Convert1To8(byte value) {
             return (byte)(value * 255);

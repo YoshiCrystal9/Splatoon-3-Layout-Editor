@@ -13,7 +13,6 @@ namespace Toolbox.Core.ViewModels
         public EventHandler OnSelected;
         public EventHandler OnChecked;
         public EventHandler OnHeaderRenamed;
-        public EventHandler OnPropertyTagChanged;
 
         public EventHandler IconDrawer;
 

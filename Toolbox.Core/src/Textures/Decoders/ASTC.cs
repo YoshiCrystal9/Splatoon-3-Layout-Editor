@@ -13,10 +13,6 @@ namespace Toolbox.Core.Imaging
             return false;
         }
 
-        public bool IsSupportedPlatform() {
-            return true;
-        }
-
         public bool Decode(TexFormat format, byte[] input, int width, int height, out byte[] output)
         {
             output = null;

@@ -15,10 +15,16 @@ namespace SampleMapEditor
     /// </summary>
     public class Plugin : IPlugin
     {
-        public string Name => "Splatoon 3 Map Editor";
+        //public string Name => "Sample Map Editor";
+        public string Name => "Splatoon 2 Stage Viewer (soon to be Editor)";
 
         public Plugin()
         {
+            UIManager.Subscribe(UIManager.UI_TYPE.NEW_FILE, "Custom Stage", typeof(StageLayoutPlugin));
+
+            //Load plugin specific data. This is where the game path is stored.
+            if (!PluginConfig.init)
+                PluginConfig.Load();
         }
     }
 }

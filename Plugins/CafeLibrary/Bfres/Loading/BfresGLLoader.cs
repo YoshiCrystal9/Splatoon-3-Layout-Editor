@@ -28,7 +28,7 @@ namespace CafeLibrary.Rendering
                 int stride = 0;
 
                 var assign = material.ShaderAssign;
-                if (assign == null || assign.AttribAssigns.Count == 0)
+                if (assign.AttribAssigns.Count == 0)
                 {
                     VaoAttribute vaoAtt = new VaoAttribute();
                     vaoAtt.vertexAttributeName = att.Name;

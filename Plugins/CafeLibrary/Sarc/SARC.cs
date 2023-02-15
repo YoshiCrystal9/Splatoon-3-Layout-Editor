@@ -4,13 +4,10 @@ using System.Text;
 using Toolbox.Core;
 using Toolbox.Core.IO;
 using System.IO;
-using MapStudio.UI;
-using UIFramework;
-using System.Linq;
 
 namespace CafeLibrary
 {
-    public class SARC : FileEditor, IFileFormat, IArchiveFile, IDisposable
+    public class SARC :  IArchiveFile, IDisposable
     {
         public bool CanSave { get; set; } = true;
 
@@ -19,18 +16,17 @@ namespace CafeLibrary
 
         public File_Info FileInfo { get; set; }
 
-        public bool CanAddFiles { get; set; } = true;
-        public bool CanRenameFiles { get; set; } = true;
-        public bool CanReplaceFiles { get; set; } = true;
-        public bool CanDeleteFiles { get; set; } = true;
+        public bool CanAddFiles { get; set; } = false;
+        public bool CanRenameFiles { get; set; } = false;
+        public bool CanReplaceFiles { get; set; } = false;
+        public bool CanDeleteFiles { get; set; } = false;
 
         public List<ArchiveFileInfo> files = new List<ArchiveFileInfo>();
         public IEnumerable<ArchiveFileInfo> Files => files;
 
         public bool Identify(File_Info fileInfo, System.IO.Stream stream)
         {
-            using (var reader = new FileReader(stream, true))
-            {
+            using (var reader = new FileReader(stream, true)) {
                 return reader.CheckSignature(4, "SARC");
             }
         }
@@ -42,10 +38,12 @@ namespace CafeLibrary
         public SARC()
         {
             FileInfo = new File_Info();
+            // new
             SarcData = new SarcData()
             {
                 endianness = Syroot.BinaryData.ByteOrder.LittleEndian,
                 Files = new Dictionary<string, byte[]>(),
+                HashOnly = false,
             };
         }
 
@@ -59,9 +57,9 @@ namespace CafeLibrary
             return sarc.Files[file];
         }
 
-        public void Load(System.IO.Stream stream)
-        {
+        public void Load(System.IO.Stream stream) {
             files.Clear();
+
             SarcData = SARC_Parser.UnpackRamN(stream);
             foreach (var file in SarcData.Files)
             {
@@ -75,16 +73,10 @@ namespace CafeLibrary
                 fileEntry.SetData(file.Value);
                 files.Add(fileEntry);
             }
-            files = files.OrderBy(x => x.FileName).ToList();
         }
 
-        public void SetFileData(string key, Stream stream)
-        {
-            foreach (var f in files)
-            {
-                if (f.FileName == key)
-                    f.FileData = stream;
-            }
+        public void SetFileData(string key, Stream stream) {
+            SarcData.Files[key] = stream.ToArray();
         }
 
         public void ClearFiles() { files.Clear(); }
@@ -107,22 +99,25 @@ namespace CafeLibrary
 
         public void Save(System.IO.Stream stream)
         {
-            SarcData.Files.Clear();
-            foreach (FileEntry file in this.files)
-            {
-                file.SaveFileFormat();
-
-                if (SarcData.HashOnly)
-                    SarcData.Files.Add(file.HashName, file.AsBytes());
-                else
-                    SarcData.Files.Add(file.FileName, file.AsBytes());
+            //Save data to stream
+            var saved = SARC_Parser.PackN(SarcData);
+            using (var writer = new FileWriter(stream)) {
+                writer.Write(saved.Item2);
             }
 
+            //Save alignment to compression type yaz0
+            if (FileInfo.Compression != null && FileInfo.Compression is Yaz0) {
+                ((Yaz0)FileInfo.Compression).Alignment = saved.Item1;
+            }
+        }
+
+        /*public void SaveCompressed(System.IO.Stream stream)
+        {
             //Save data to stream
             var saved = SARC_Parser.PackN(SarcData);
             using (var writer = new FileWriter(stream))
             {
-                writer.Write(saved.Item2);
+                writer.Write(YAZ0.Compress(saved.Item2));
             }
 
             //Save alignment to compression type yaz0
@@ -130,27 +125,12 @@ namespace CafeLibrary
             {
                 ((Yaz0)FileInfo.Compression).Alignment = saved.Item1;
             }
-        }
+        }*/
 
         public void Dispose()
         {
             foreach (var file in files)
-            {
-                if (file.FileFormat != null && file.FileFormat is IDisposable)
-                    ((IDisposable)file.FileFormat).Dispose();
                 file.FileData?.Dispose();
-            }
-        }
-
-        /// <summary>
-        /// Prepares the dock layouts to be used for the file format.
-        /// </summary>
-        public override List<DockWindow> PrepareDocks()
-        {
-            List<DockWindow> windows = new List<DockWindow>();
-            windows.Add(Workspace.Outliner);
-            windows.Add(Workspace.PropertyWindow);
-            return windows;
         }
 
         public class FileEntry : ArchiveFileInfo

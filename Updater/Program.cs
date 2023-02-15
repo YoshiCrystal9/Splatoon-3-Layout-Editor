@@ -20,7 +20,8 @@ namespace Updater
                 {
                     case "-d":
                     case "--download":
-                        UpdaterHelper.Setup("YoshiCrystal9", "Splatoon-3-Layout-Editor", "MapStudio.exe");
+                        //UpdaterHelper.Setup("MapStudioProject", "Track-Studio", "TrackStudio.exe");
+                        UpdaterHelper.Setup("Sheldon10095", "Splatoon-2-Stage-Layout-Editor", "MapStudio.exe");
                         UpdaterHelper.DownloadLatest(execDirectory, 0, force);
                         break;
                     case "-i":
@@ -58,7 +59,7 @@ namespace Updater
             Console.WriteLine("Booting...");
 
             Thread.Sleep(3000);
-            System.Diagnostics.Process.Start(Path.Combine(execDirectory, "TrackStudio.exe"));
+            System.Diagnostics.Process.Start(Path.Combine(execDirectory, "MapStudio.exe")); //"TrackStudio.exe"));
         }
     }
 }

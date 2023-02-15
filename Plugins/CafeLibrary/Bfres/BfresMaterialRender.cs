@@ -324,9 +324,7 @@ namespace CafeLibrary.Rendering
 
             shader.SetBoolToInt("drawDebugAreaID", BfresRender.DrawDebugAreaID);
             shader.SetInt("areaID", AreaIndex);
-            shader.SetBoolToInt("displayVertexColors", ((BfresMeshRender)mesh).HasVertexColors);
 
-           
            // UpdateMaterialBlock();
             MaterialBlock.RenderBuffer(shader.program, "ub_MaterialParams");
         }

@@ -18,7 +18,7 @@ namespace CafeLibrary.ModelConversion
 {
     public class BfresModelImporter
     {
-        static System.Numerics.Matrix4x4 GlobalTransform = System.Numerics.Matrix4x4.Identity;
+        static System.Numerics.Matrix4x4 GlobalTransform;
 
         public static Model ImportModel(ResFile resFile, Model model, IOScene scene, string filePath, ModelImportSettings importSettings)
         {
@@ -57,6 +57,7 @@ namespace CafeLibrary.ModelConversion
             string ext = Path.GetExtension(filePath);
             MapStudio.UI.ProcessLoading.Instance.Update(10, 100, $"Loading {ext} file.");
 
+            GlobalTransform = System.Numerics.Matrix4x4.Identity;
             IOScene scene = IOManager.LoadScene(filePath, settings);
 
             var fmdl = ConvertScene(resFile, model, scene, importSettings);
@@ -67,12 +68,6 @@ namespace CafeLibrary.ModelConversion
         static Model ConvertScene(ResFile resFile, Model fmdl, IOScene scene, ModelImportSettings importSettings)
         {
             var model = scene.Models.FirstOrDefault();
-
-            GlobalTransform = System.Numerics.Matrix4x4.Identity;
-            if (importSettings.Rotate90)
-                GlobalTransform = System.Numerics.Matrix4x4.CreateRotationX(IONET.Core.IOMath.MathExt.DegToRad(90));
-            if (importSettings.RotateNeg90)
-                GlobalTransform = System.Numerics.Matrix4x4.CreateRotationX(IONET.Core.IOMath.MathExt.DegToRad(-90));
 
             fmdl.Name = model.Name;
 
@@ -98,11 +93,6 @@ namespace CafeLibrary.ModelConversion
 
                 Material fmat = new Material();
                 fmat.Name = mat.Label != null ? mat.Label : mat.Name;
-                if (string.IsNullOrEmpty(fmat.Name))
-                    continue;
-
-                fmat.Name = Utils.RenameDuplicateString(fmat.Name, fmdl.Materials.Keys.ToList());
-
                 if (mat.DiffuseMap != null)
                 {
                     fmat.Samplers.Add("_a0", new Sampler() { Name = "_a0", TexSampler = new TexSampler()});
@@ -139,9 +129,6 @@ namespace CafeLibrary.ModelConversion
                     if (string.IsNullOrEmpty(bone.Name))
                         continue;
 
-                    if (bone.Parent == null && GlobalTransform != System.Numerics.Matrix4x4.Identity)
-                        bone.LocalTransform *= GlobalTransform;
-
                     Vector4F rotation = new Vector4F(
                         bone.RotationEuler.X,
                         bone.RotationEuler.Y,
@@ -151,8 +138,6 @@ namespace CafeLibrary.ModelConversion
                     if (fmdl.Skeleton.FlagsRotation == SkeletonFlagsRotation.Quaternion)
                         rotation = new Vector4F(bone.Rotation.X, bone.Rotation.Y, bone.Rotation.Z, bone.Rotation.W);
 
-                    var pos = bone.Translation;
-
                     var bfresBone = new Bone()
                     {
                         FlagsRotation = BoneFlagsRotation.EulerXYZ,
@@ -161,7 +146,10 @@ namespace CafeLibrary.ModelConversion
                         RigidMatrixIndex = -1,  //Gets calculated after
                         SmoothMatrixIndex = -1, //Gets calculated after
                         ParentIndex = (short)model.Skeleton.IndexOf(bone.Parent),
-                        Position = new Vector3F(pos.X, pos.Y, pos.Z),
+                        Position = new Vector3F(
+                             bone.Translation.X,
+                             bone.Translation.Y,
+                             bone.Translation.Z),
                         Scale = new Vector3F(
                              bone.Scale.X,
                              bone.Scale.Y,
@@ -195,27 +183,50 @@ namespace CafeLibrary.ModelConversion
                 //Set the skin count
                 uint vertexSkinCount = 0;
 
-                var riggedBones = mesh.Vertices.SelectMany(x => x.Envelope.Weights?.Select(x => x.BoneName)).Distinct().ToList();
-                //Check if more than one bone is rigged to consider using it for skinning.
-                //Single bones would use a direct bone index with rigid skinning
-                if (riggedBones?.Count >= 1)
-                    vertexSkinCount = CalculateSkinCount(mesh.Vertices);
-                //Apply rigid bodies so vertices are in world space
-                if (riggedBones?.Count == 1)
+                try
                 {
-                    var bn = model.Skeleton.BreathFirstOrder().Where(x => x.Name == riggedBones[0]).FirstOrDefault();
-                    if (bn != null)
-                        mesh.TransformVertices(bn.WorldTransform);
-                }
+                    bool rigidBind = false;
+                    //Check if the bone list has only 1 bone or less. If so it uses rigid binding
+                    var riggedBones = mesh.Vertices.SelectMany(x => x.Envelope.Weights?.Select(x => x.BoneName)).Distinct().ToList();
+                     if (riggedBones == null || riggedBones.Count <= 1)
+                        rigidBind = true;
 
-                //Todo. This basically reimports meshes with the original skin count to target as
-                /*    if (importSettings.Meshes.Any(x => x.Name == mesh.Name))
+                    if (!rigidBind)
+                        CalculateSkinCount(mesh.Vertices);
+
+                    //Todo. This basically reimports meshes with the original skin count to target as
+                    /*    if (importSettings.Meshes.Any(x => x.Name == mesh.Name))
+                        {
+                            var meshSettings = importSettings.Meshes.FirstOrDefault(x => x.Name == mesh.Name);
+                            vertexSkinCount = (uint)meshSettings.SkinCount;
+                        }*/
+
+                    //Set the skin count for each mesh. This is either calculated or applied via mesh meta info
+                    skinCounts[sindex++] = vertexSkinCount;
+
+                    //Transform rigid bindings into worldspace
+                    if (rigidBind && riggedBones?.Count == 1)
                     {
-                        var meshSettings = importSettings.Meshes.FirstOrDefault(x => x.Name == mesh.Name);
-                        vertexSkinCount = (uint)meshSettings.SkinCount;
-                    }*/
+                        //For rigid bind types we will fully transform the model into worldspace 
+                        var bn = model.Skeleton.BreathFirstOrder().Where(x => x.Name == riggedBones[0]).FirstOrDefault();
+                        if (bn != null)
+                            mesh.TransformVertices(bn.WorldTransform);
 
-                skinCounts[sindex++] = vertexSkinCount;
+                        //Set the bone into identity as we want these to be applied
+                        var bfresBone = fmdl.Skeleton.Bones.Values.Where(x => x.Name == riggedBones[0]).FirstOrDefault();
+                        if (bfresBone != null)
+                        {
+                            bfresBone.Position = new Vector3F(0, 0, 0);
+                            bfresBone.Rotation = new Vector4F(0, 0, 0, 1);
+                            bfresBone.Scale = new Vector3F(1, 1, 1);
+                        }
+                        continue;
+                    }
+                }
+                catch
+                {
+
+                }
 
                 foreach (var vertex in mesh.Vertices)
                 {
@@ -294,11 +305,6 @@ namespace CafeLibrary.ModelConversion
                 if (mesh.Vertices.Count == 0)
                     continue;
 
-                mesh.TransformVertices(GlobalTransform);
-
-                foreach (var v in mesh.Vertices)
-                    NormalizeByteType(v.Envelope.Weights);
-
                 MapStudio.UI.ProcessLoading.Instance.Update(meshIndex, model.Meshes.Count, $"Importing mesh {mesh.Name}");
 
                 var meshSettings = new ModelImportSettings.MeshSettings();
@@ -311,10 +317,11 @@ namespace CafeLibrary.ModelConversion
                         foreach (var v in mesh.Vertices)
                         {
                             //Optimize weights
-                          //  v.Envelope.NormalizeByteType();
+                            //v.Envelope.Optimize(meshSettings.SkinCount);
                         }
                     }
                 }
+
                 var names = fmdl.Shapes.Values.Select(x => x.Name).ToList();
 
                 Shape fshp = new Shape();
@@ -357,7 +364,7 @@ namespace CafeLibrary.ModelConversion
                 //Generate boundings for the mesh
                 List<IOVertex> vertices = mesh.Vertices;
 
-                var boundingBox = CalculateBoundingBox(vertices, model.Skeleton.BreathFirstOrder(), fshp, fshp.VertexSkinCount > 0);
+                var boundingBox = CalculateBoundingBox(vertices, model.Skeleton.BreathFirstOrder(), fshp.VertexSkinCount > 0);
                 fshp.SubMeshBoundings.Add(boundingBox); //Create bounding for total mesh
                 fshp.SubMeshBoundings.Add(boundingBox); //Create bounding for single sub meshes
 
@@ -517,44 +524,6 @@ namespace CafeLibrary.ModelConversion
 
         }
 
-        /// <summary>
-        /// Makes sure all weights add up to 255.
-        /// Does not modify any locked weights.
-        /// </summary>
-        private static void NormalizeByteType(IEnumerable<IOBoneWeight> weights)
-        {
-            float scale = 1.0f / 255f;
-
-            int MaxWeight = 255;
-            var list = weights.ToList();
-
-            int id = 0;
-            foreach (IOBoneWeight b in weights)
-            {
-                id++;
-
-                if (b == null)
-                    continue;
-
-                int weight = (int)(Math.Round(b.Weight / scale, 2));
-
-                //Check if the weight is the last id
-                if (list.Count == id)
-                    weight = MaxWeight; //Set as the last amount of weights to normalize/fill the rest to equal 255
-
-                if (weight >= MaxWeight)
-                {
-                    weight = MaxWeight;
-                    MaxWeight = 0;
-                }
-                else
-                    MaxWeight -= weight;
-
-                //Turn back into float normally
-                b.Weight = weight * scale;
-            }
-        }
-
         static void AddSubMesh(PolygonDivision.PolygonOctree subMesh, Shape shape, Mesh mesh,
       ref int offset, ref List<uint> indexList)
         {
@@ -650,7 +619,7 @@ namespace CafeLibrary.ModelConversion
 
         }
 
-        private static Bounding CalculateBoundingBox(List<IOVertex> vertices, List<IOBone> bones, Shape fshp, bool isSmoothSkinning)
+        private static Bounding CalculateBoundingBox(List<IOVertex> vertices, List<IOBone> bones, bool isSmoothSkinning)
         {
             float minX = float.MaxValue;
             float minY = float.MaxValue;
@@ -679,21 +648,12 @@ namespace CafeLibrary.ModelConversion
 
             for (int i = 0; i < vertices.Count; i++)
             {
-                var position = vertices[i].Position;
-
-                //Reset rigid skinning types to local space
-                if (fshp.VertexSkinCount == 0 && bones.Count > 0)
-                {
-                    var transform = bones[fshp.BoneIndex].WorldTransform;
-                    System.Numerics.Matrix4x4.Invert(transform, out System.Numerics.Matrix4x4 inverted);
-                    position = System.Numerics.Vector3.Transform(position, inverted);
-                }
-                minX = Math.Min(minX, position.X);
-                minY = Math.Min(minY, position.Y);
-                minZ = Math.Min(minZ, position.Z);
-                maxX = Math.Max(maxX, position.X);
-                maxY = Math.Max(maxY, position.Y);
-                maxZ = Math.Max(maxZ, position.Z);
+                minX = Math.Min(minX, vertices[i].Position.X);
+                minY = Math.Min(minY, vertices[i].Position.Y);
+                minZ = Math.Min(minZ, vertices[i].Position.Z);
+                maxX = Math.Max(maxX, vertices[i].Position.X);
+                maxY = Math.Max(maxY, vertices[i].Position.Y);
+                maxZ = Math.Max(maxZ, vertices[i].Position.Z);
             }
 
             return CalculateBoundingBox(
@@ -743,8 +703,8 @@ namespace CafeLibrary.ModelConversion
             List<Vector4F> Tangents = new List<Vector4F>();
             List<Vector4F> Bitangents = new List<Vector4F>();
 
-            int numTexCoords = Math.Min(vertices.Max(x => x.UVs.Count), 4);
-            int numColors = Math.Min(vertices.Max(x => x.Colors.Count), 4);
+            int numTexCoords = vertices.Max(x => x.UVs.Count);
+            int numColors = vertices.Max(x => x.Colors.Count);
 
             Vector4F[][] TexCoords = new Vector4F[numTexCoords][];
             Vector4F[][] Colors = new Vector4F[numColors][];
@@ -760,7 +720,7 @@ namespace CafeLibrary.ModelConversion
             {
                 var vertex = vertices[v];
 
-                var position = new System.Numerics.Vector3(vertex.Position.X, vertex.Position.Y, vertex.Position.Z);
+                var position = vertex.Position;
                 var normal = vertex.Normal;
 
                 //Reset rigid skinning types to local space
@@ -780,6 +740,9 @@ namespace CafeLibrary.ModelConversion
                     position = System.Numerics.Vector3.Transform(position, inverted);
                     normal = System.Numerics.Vector3.TransformNormal(normal, inverted);
                 }
+
+               // position = System.Numerics.Vector3.Transform(position, GlobalTransform);
+               // normal = System.Numerics.Vector3.Transform(normal, GlobalTransform);
 
                 Positions.Add(new Vector4F(
                     position.X,
@@ -809,9 +772,6 @@ namespace CafeLibrary.ModelConversion
 
                 for (int i = 0; i < vertex.UVs?.Count; i++)
                 {
-                    if (i >= TexCoords.Length)
-                        continue;
-
                     TexCoords[i][v] = new Vector4F(
                         vertex.UVs[i].X,
                         1 - vertex.UVs[i].Y,

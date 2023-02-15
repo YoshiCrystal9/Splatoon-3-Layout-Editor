@@ -72,23 +72,6 @@ namespace CafeLibrary
 
                 ((TextureFolder)this.Parent).OnTextureEdited?.Invoke(this, EventArgs.Empty);
             };
-            this.OnHeaderRenamed += delegate
-            {
-                //Update the lookup name table from the parent bfres file
-                var folder = this.Parent as TextureFolder;
-                folder.OnTextureRenamed?.Invoke(this, EventArgs.Empty);
-
-                string name = tex.Name;
-                //Remove original entry
-                var textureData = folder.ResFile.Textures[name];
-                folder.ResFile.Textures.RemoveKey(name);
-
-                //Add new one
-                if (!folder.ResFile.Textures.ContainsKey(this.Header))
-                    folder.ResFile.Textures.Add(this.Header, textureData);
-                //Update the name
-                tex.Name = this.Header;
-            };
         }
 
         //File updated externally
@@ -226,7 +209,7 @@ namespace CafeLibrary
                     foreach (var sel in selected)
                     {
                         var tex = sel.Tag as STGenericTexture;
-                        tex.Export(Path.Combine(dlg.SelectedPath,$"{tex.Name}.png"), new TextureExportSettings());
+                        tex.Export($"{dlg.SelectedPath}\\{tex.Name}.png", new TextureExportSettings());
                     }
                 }
             }
@@ -407,7 +390,6 @@ namespace CafeLibrary
         public EventHandler OnTextureRemoved;
         public EventHandler OnTextureReplaced;
         public EventHandler OnTextureEdited;
-        public EventHandler OnTextureRenamed;
 
         /// <summary>
         /// Gets the textures from the folder into a lookup dictionary.
@@ -732,7 +714,7 @@ namespace CafeLibrary
             foreach (var tex in this.Children)
             {
                 var texData = tex.Tag as STGenericTexture;
-                texData.Export(Path.Combine(folder,$"{tex.Header}{ext}"), new TextureExportSettings());
+                texData.Export($"{folder}\\{tex.Header}{ext}", new TextureExportSettings());
             }
             FileUtility.OpenFolder(folder);
         }
@@ -772,7 +754,6 @@ namespace CafeLibrary
                 });
             }
             var tex = BfresTextureImporter.ImportTexture(ResFile, BntxFile, texture.Name, surfaces, texture.Format, (uint)texture.Width, (uint)texture.Height, (uint)texture.MipCount);
-            tex.Name = texture.Name;
             var texNode = ProcessNewTexture(filePath, tex);
             var genericTex = ((STGenericTexture)texNode.Tag);
 

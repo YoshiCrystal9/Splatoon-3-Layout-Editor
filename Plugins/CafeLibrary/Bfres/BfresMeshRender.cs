@@ -58,8 +58,6 @@ namespace CafeLibrary.Rendering
             set { UINode.IsSelected = value; }
         }
 
-        public bool HasVertexColors => Attributes.Any(x => x.name == "_c0");
-
         List<BfresGLLoader.VaoAttribute> Attributes;
 
         public BfresMeshRender(int index) { Index = index; }

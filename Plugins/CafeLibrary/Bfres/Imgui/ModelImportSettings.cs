@@ -34,8 +34,6 @@ namespace CafeLibrary
             public string Name { get; set; }
             public string MaterialName;
             public string ImportedMaterial;
-            public BfresLibrary.Material MaterialInstance;
-
             public string PresetName { get; set; }
 
             public bool KeepTextures = true;

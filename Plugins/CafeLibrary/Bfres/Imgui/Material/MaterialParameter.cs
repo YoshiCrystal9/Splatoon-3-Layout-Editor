@@ -281,7 +281,6 @@ namespace CafeLibrary
                                 Rotation = rot,
                             };
                             GLContext.ActiveContext.UpdateViewport = true;
-                            material.BatchEditParams(param);
                             material.OnParamUpdated(param, true);
                         });
                         bool edited0 = ImGui.DragFloat2("Scale", ref scale);
@@ -303,7 +302,6 @@ namespace CafeLibrary
             }
             if (updated) {
                 GLContext.ActiveContext.UpdateViewport = true;
-                material.BatchEditParams(param);
                 material.OnParamUpdated(param, true);
             }
         }

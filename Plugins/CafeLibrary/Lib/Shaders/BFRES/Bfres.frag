@@ -13,8 +13,6 @@ uniform int areaID;
 uniform float uBrightness;
 uniform int isSelected;
 
-uniform int displayVertexColors;
-
 struct BakeResult {
     vec3 IndirectLight;
     float Shadow;
@@ -164,10 +162,6 @@ void main(){
             break;
         }
     }
-
-
-	if (displayVertexColors == 1)
-		fragOutput.rgba *= v_VtxColor.rgba;
 
     if (drawDebugAreaID == 1)
     {

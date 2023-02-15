@@ -38,10 +38,10 @@ namespace CafeLibrary
         {
             _isSwitch = isSwitch;
 
-            if (!Directory.Exists(Path.Combine(Runtime.ExecutableDir,"Presets","Materials")))
-                Directory.CreateDirectory(Path.Combine(Runtime.ExecutableDir,"Presets","Materials"));
+            if (!Directory.Exists($"{Runtime.ExecutableDir}\\Presets\\Materials\\"))
+                Directory.CreateDirectory($"{Runtime.ExecutableDir}\\Presets\\Materials\\");
 
-            GlobalPresets = GetPresetsFromFolder(Path.Combine(Runtime.ExecutableDir,"Presets","Materials"), _isSwitch);
+            GlobalPresets = GetPresetsFromFolder($"{Runtime.ExecutableDir}\\Presets\\Materials\\", _isSwitch);
             loaded = true;
         }
 
@@ -60,14 +60,14 @@ namespace CafeLibrary
                     if (result == 1)
                     {
                         //Download
-                        UpdaterHelper.DownloadRelease(Path.Combine(Runtime.ExecutableDir,"Presets","Materials"), release, 0).Wait();
+                        UpdaterHelper.DownloadRelease($"{Runtime.ExecutableDir}\\Presets\\Materials", release, 0).Wait();
                         GlobalPresets.Children.Clear();
                         selectedMaterial = null;
 
                         //Exit the tool and install via the updater
-                        UpdaterHelper.Install(Path.Combine(Runtime.ExecutableDir,"Presets","Materials"));
+                        UpdaterHelper.Install($"{Runtime.ExecutableDir}\\Presets\\Materials");
                         //Reload presets
-                        GlobalPresets = GetPresetsFromFolder(Path.Combine(Runtime.ExecutableDir,"Presets","Materials"), _isSwitch);
+                        GlobalPresets = GetPresetsFromFolder($"{Runtime.ExecutableDir}\\Presets\\Materials\\", _isSwitch);
                     }
                 }
             }

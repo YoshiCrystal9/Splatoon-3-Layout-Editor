@@ -191,16 +191,6 @@ namespace CafeLibrary
                 Renderer.Textures.Remove(node.Header);
                 GLContext.ActiveContext.UpdateViewport = true;
             };
-            TextureFolder.OnTextureRenamed += (o, e) =>
-            {
-                var node = o as TextureNode;
-                var tex = node.Tag as STGenericTexture;
-                //Update the lookup
-                Renderer.Textures.Remove(tex.Name);
-                Renderer.Textures.Add(node.Header,
-                    new GenericRenderer.TextureView(tex) { OriginalSource = tex });
-                GLContext.ActiveContext.UpdateViewport = true;
-            };
             TextureFolder.OnTextureReplaced += (o, e) =>
             {
                 var node = o as TextureNode;
