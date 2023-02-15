@@ -361,7 +361,7 @@ namespace SampleMapEditor
 
             // Objs / Rails (?)
             Editors.Add(new ObjectEditor(this, stage.Objs));
-            Editors.Add(new RailEditor(this, colorSettings.RailColor, stage.Rails));
+            //Editors.Add(new RailEditor(this, colorSettings.RailColor, stage.Rails));
 
 
 

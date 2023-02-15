@@ -20,8 +20,8 @@ namespace SampleMapEditor
         
         // TEST func
         //private FileInfo originalFileInfo => new FileInfo(originalPath);
-        private string stageName = "Fld_Custom01_Vss";
-        private string bymlFileName => originalPath != String.Empty ? new FileInfo(originalPath).Name + ".byaml" : "Fld_Custom01_Vss.byaml";
+        private string stageName = "Vss_Custom.byml";
+        private string bymlFileName => originalPath != String.Empty ? new FileInfo(originalPath).Name + ".byml" : "Vss_Custom.byml";
 
         private BymlFileData BymlData;
 
@@ -31,7 +31,7 @@ namespace SampleMapEditor
             {
                 byteOrder = Syroot.BinaryData.ByteOrder.LittleEndian,
                 SupportPaths = false,
-                Version = 3
+                Version = 7
             };
         }
 
@@ -58,19 +58,15 @@ namespace SampleMapEditor
         /// <param name="stream">The stream from which the instance will be loaded.</param>
         private void Load(System.IO.Stream stream)
         {
-            SARC arc = new SARC();
-            //arc.Load(stream);
-            arc.Load(new Yaz0().Decompress(stream));
-            BymlData = ByamlFile.LoadN(arc.files[0].FileData, false);
+
+            BymlData = ByamlFile.LoadN(stream, true);
+            //   Console.WriteLine($"Loaded byaml! {fileName}");
+            ByamlSerialize.Deserialize(this, BymlData.RootNode);
+            //   Console.WriteLine("Deserialized byaml!");
 
 
             GlobalSettings.LoadDataBase();
 
-
-            //BymlData = ByamlFile.LoadN(stream, true);
-            //   Console.WriteLine($"Loaded byaml! {fileName}");
-            /*ByamlSerialize.Deserialize(this, BymlData.RootNode);
-               Console.WriteLine("Deserialized byaml!");*/
 
             ByamlSerialize.SpecialDeserialize(this, BymlData.RootNode);
             Console.WriteLine("Special Deserialized byaml!");
@@ -165,7 +161,7 @@ namespace SampleMapEditor
                 if (Objs[i].Links.Count == 0)
                     continue;
 
-                Console.WriteLine($"Object {Objs[i].Id} has {Objs[i].Links.Count} links.");
+                Console.WriteLine($"Actor {Objs[i].Id} has {Objs[i].Links.Count} links.");
                 /*foreach (var link in (IDictionary<string, LinkInfo>)Objs[i].Links)
                 {
                     Console.WriteLine($"  {link.Key}: {link.Value.DefinitionName}, {link.Value.DestUnitId}");
