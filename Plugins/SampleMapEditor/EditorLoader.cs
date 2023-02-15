@@ -131,47 +131,23 @@ namespace SampleMapEditor
             return new Vector3(t["X"], t["Y"], t["Z"]);
         }
 
+        private const string RelativePath = "Pack/Actor/";
 
         private void ParseActorDb()
         {
             //string mushPackPath = $"{PluginConfig.S2GamePath}/Pack/Mush.release.pack";
-            string mushPackPath = GetContentPath("Pack/Mush.release.pack");
-            SARC mushSARC = new SARC();
+            string ActorsPath = GetContentPath(RelativePath);
+            string[] ActorFiles = Directory.GetFiles(ActorsPath);
 
-            // Load Mush.release.pack
-            using (FileReader r = new FileReader(mushPackPath))
+            if (ActorFiles == null) return;
+
+            foreach (string ActorsNames in ActorFiles)
             {
-                mushSARC.Load(r.BaseStream);
+                Actors.Add(new Actor(ActorsNames));
+                Console.WriteLine(ActorsNames);
             }
 
-            // Find ActorDb
-            BymlFileData actorDbByml = new BymlFileData();
-            foreach (var file in mushSARC.Files)
-            {
-                if (file.FileName.Contains("ActorDb"))
-                {
-                    Console.WriteLine("Found ActorDb!");
-                    if (Nisasyst.IsEncrypted(file.FileData))
-                    {
-                        actorDbByml = Nisasyst.DecryptByaml((SARC.FileEntry)file);
-                    }
-                    else
-                    {
-                        actorDbByml = ByamlFile.LoadN(new MemoryStream(file.AsBytes()));
-                    }
-                }
-                Console.WriteLine($"{file.FileName} {(Nisasyst.IsEncrypted(file.FileData) ? "is" : "is not")} Nisasyst encrypted.");
-            }
-
-            if (actorDbByml == null) return;
-
-            foreach (var node in actorDbByml.RootNode)
-            {
-                Actors.Add(new Actor(node));
-                //Console.WriteLine(node["Name"]);
-            }
-
-            Console.WriteLine("Finished loading ActorDb.");
+            Console.WriteLine("Finished loading Actors.");
         }
 
 
@@ -182,17 +158,17 @@ namespace SampleMapEditor
             if (actor == null) return null;
             if (actor.ResName == "") return null;
             //return $"{PluginConfig.S2GamePath}/Model/{actor.ResName}.Nin_NX_NVN.szs";
-            return GetContentPath($"Model/{actor.ResName}.Nin_NX_NVN.szs");
+            return GetContentPath($"Model/{actor.ResName}.szs");
         }
 
         public string GetModelPathFromObject(dynamic obj)
         {
-            return GetModelPathFromUnitConfigName(obj["UnitConfigName"]);
+            return GetModelPathFromUnitConfigName(obj["Name"]);
         }
 
         public Actor GetActorFromObj(dynamic obj)
         {
-            string ucName = obj["UnitConfigName"];
+            string ucName = obj["Name"];
             return GetActorFromUnitConfigName(ucName);
         }
 
@@ -222,9 +198,9 @@ namespace SampleMapEditor
             MapObjList.Clear();
 
             // Print out the name of each object that will be loaded
-            foreach (var obj in lytByml.RootNode["Objs"])
+            foreach (var obj in lytByml.RootNode["Actors"])
             {
-                Console.WriteLine(obj["UnitConfigName"]);
+                Console.WriteLine(obj["Name"]);
                 float x = obj["Translate"]["X"];
                 float y = obj["Translate"]["Y"];
                 float z = obj["Translate"]["Z"];
@@ -232,10 +208,10 @@ namespace SampleMapEditor
                 MapObjList.Add(obj);
             }
 
-            Console.WriteLine("Object list:");
+            Console.WriteLine("Actors list:");
             foreach (var obj in MapObjList)
             {
-                Console.WriteLine($"  Object name: {obj["UnitConfigName"]}");
+                Console.WriteLine($"  Actors name: {obj["Name"]}");
             }
 
             // (TESTING) Load the first object in the list
