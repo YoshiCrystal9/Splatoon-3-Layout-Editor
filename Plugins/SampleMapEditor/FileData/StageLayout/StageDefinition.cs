@@ -60,101 +60,24 @@ namespace SampleMapEditor
         {
 
             BymlData = ByamlFile.LoadN(stream, true);
-            //   Console.WriteLine($"Loaded byaml! {fileName}");
+            //Console.WriteLine($"Loaded byaml! {fileName}");
             ByamlSerialize.Deserialize(this, BymlData.RootNode);
-            //   Console.WriteLine("Deserialized byaml!");
+            Console.WriteLine("Deserialized byaml!");
 
 
             GlobalSettings.LoadDataBase();
 
 
-            ByamlSerialize.SpecialDeserialize(this, BymlData.RootNode);
-            Console.WriteLine("Special Deserialized byaml!");
-
-            // After loading all the instances, allow references to be resolved.
-            /*Areas?.ForEach(x => x.DeserializeReferences(this));
-            Clips?.ForEach(x => x.DeserializeReferences(this));
-            ClipPattern?.AreaFlag?.ForEach(x => x.DeserializeReferences(this));
-            EnemyPaths?.ForEach(x => x.DeserializeReferences(this));
-            GCameraPaths?.ForEach(x => x.DeserializeReferences(this));
-            GlidePaths?.ForEach(x => x.DeserializeReferences(this));
-            GravityPaths?.ForEach(x => x.DeserializeReferences(this));
-            ItemPaths?.ForEach(x => x.DeserializeReferences(this));
-            JugemPaths?.ForEach(x => x.DeserializeReferences(this));
-            LapPaths?.ForEach(x => x.DeserializeReferences(this));
-            ObjPaths?.ForEach(x => x.DeserializeReferences(this));
-            Paths?.ForEach(x => x.DeserializeReferences(this));
-            PullPaths?.ForEach(x => x.DeserializeReferences(this));
-            Objs?.ForEach(x => x.DeserializeReferences(this));
-            ReplayCameras?.ForEach(x => x.DeserializeReferences(this));
-            IntroCameras?.ForEach(x => x.DeserializeReferences(this));
-            SteerAssistPaths?.ForEach(x => x.DeserializeReferences(this));
-            RouteChanges?.ForEach(x => x.DeserializeReferences(this));*/
-
-            //ByamlSerialize.Deserialize(this.Rails., BymlData.RootNode["Rails"]);
-            //Console.WriteLine($"Objects count: {BymlData.RootNode["Objs"].Count}");
+            //ByamlSerialize.SpecialDeserialize(this, BymlData.RootNode);
+            //Console.WriteLine("Special Deserialized byaml!");
 
             // Load Actor Database
 
             Rails?.ForEach(x => x.DeserializeReferences(this));
             Objs?.ForEach(x => x.DeserializeReferences(this));
 
-
-            // Maybe try to load objects in differently. Get the corresponding Actor for the object, and use the Actor's ClassName to create the object accordingly.
-            /*Objs?.ForEach(x =>
-            {
-                Console.WriteLine("~~~");
-                Console.WriteLine($"ClassName: {MuElement.GetActorClassName(x)}");
-                switch (MuElement.GetActorClassName(x))
-                {
-                    case "Field":
-                        x = x as MuElement;
-                        break;
-                    case "DesignerObj":
-                        //x = (MuObj)x; // x as DesignerObj;
-                        break;
-                    default:
-                        break;
-                }
-                Console.WriteLine($"Deserialized object to type: {x*//*.GetType().Name*//*}");
-                x.DeserializeReferences(this);
-            });*/
-
-
-            //Convert baked in tool obj paths to editable rail paths
-            /*if (ObjPaths != null)
-            {
-                List<ObjPath> converted = ObjPaths.Where(x => x.BakedRailPath == true).ToList();
-                if (converted.Count > 0 && Paths == null)
-                    Paths = new List<Path>();
-
-                foreach (var objPath in converted)
-                {
-                    var path = Path.ConvertFromObjPath(objPath);
-                    Paths.Add(path);
-                    ObjPaths.Remove(objPath);
-
-                    //Link the obj path
-                    foreach (var obj in Objs)
-                    {
-                        if (obj.ObjPath == objPath)
-                        {
-                            int ptIndex = -1;
-                            if (obj.ObjPathPoint != null)
-                                ptIndex = obj.ObjPath.Points.IndexOf(obj.ObjPathPoint);
-
-                            obj.ObjPath = null;
-                            obj.ObjPathPoint = null;
-                            obj.Path = path;
-                            if (ptIndex != -1 && ptIndex < path.Points.Count)
-                                obj.PathPoint = path.Points[ptIndex];
-                        }
-                    }
-                }
-            }*/
-
-            Objs?.ForEach(x => Console.WriteLine(x.UnitConfigName)); // [DEBUG] Log all object names
-            Rails?.ForEach(r => Console.WriteLine(r.UnitConfigName));
+            Objs?.ForEach(x => Console.WriteLine(x.Name)); // [DEBUG] Log all object names
+            Rails?.ForEach(r => Console.WriteLine(r.Name));
 
             for (int i = 0; i < Objs?.Count; i++)
             {

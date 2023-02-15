@@ -34,7 +34,7 @@ namespace SampleMapEditor
         {
             get
             {
-                return this.UnitConfigName;
+                return this.Name;
             }
         }
 
@@ -42,14 +42,14 @@ namespace SampleMapEditor
         public bool IsLinkDest { get; set; }*/
 
         [ByamlMember]
-        [BindGUI("LayerConfigName", Category = "OBJECT", ColumnIndex = 0, Control = BindControl.Default)]
-        public string LayerConfigName { get; set; }
+        [BindGUI("Layer", Category = "OBJECT", ColumnIndex = 0, Control = BindControl.Default)]
+        public string Layer { get; set; }
 
         /*[ByamlMember]
         public string? ModelName { get; set; }*/
 
         [ByamlMember]
-        public string UnitConfigName { get; set; }
+        public string Name { get; set; }
 
         /*[ByamlMember]*/
         public Dictionary<string, List<LinkInfo>> Links { get; set; } = new Dictionary<string, List<LinkInfo>>();
@@ -63,8 +63,8 @@ namespace SampleMapEditor
 
         public MuElement()
         {
-            this.LayerConfigName = "Cmn";
-            this.UnitConfigName = "Obj_GeneralBox_15x15x15_Blitz";
+            this.Layer = "Cmn";
+            this.Name = "Obj_GeneralBox_15x15x15_Blitz";
 
             this.Scale = new ByamlVector3F(1, 1, 1);
         }
@@ -72,8 +72,8 @@ namespace SampleMapEditor
 
         public MuElement(MuElement other)
         {
-            LayerConfigName = other.LayerConfigName;
-            UnitConfigName = other.UnitConfigName;
+            Layer = other.Layer;
+            Name = other.Name;
             Links = other.Links;
             Scale = other.Scale;
             Translate = other.Translate;
@@ -256,28 +256,19 @@ namespace SampleMapEditor
 
         public virtual MuElement Clone()
         {
-            /*return new MuElement()
-            {
-                LayerConfigName = this.LayerConfigName,
-                UnitConfigName = this.UnitConfigName,
-                Links = this.Links,
-                Scale = this.Scale,
-                Translate = this.Translate,
-                RotateDegrees = this.RotateDegrees,
-            };*/
             return new MuElement(this);
         }
 
         public static string GetActorClassName(MuElement element)
         {
-            return GlobalSettings.ActorDatabase[element.UnitConfigName].ClassName;
+            return GlobalSettings.ActorDatabase[element.Name].ClassName;
         }
         public static string GetActorClassName(dynamic element)
         {
             string name = "";
             try
             {
-                name = GlobalSettings.ActorDatabase[element["UnitConfigName"]].ClassName;
+                name = GlobalSettings.ActorDatabase[element["Name"]].ClassName;
             }
             catch (Exception ex)
             {
