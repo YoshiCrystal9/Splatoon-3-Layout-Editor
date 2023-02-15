@@ -435,33 +435,33 @@ namespace SampleMapEditor.LayoutEditor
 
 
 
-        private void LoadDeliTextures(ref EditableObject render)
-        {
-            if (render is BfresRender)
-            {
-                Console.WriteLine("Loading DeliTextures!");
-                var deliTex_sarc = new SARC();
-                string dtpath = EditorLoader.GetContentPath("Model/DeliTextures.Nin_NX_NVN.szs");
-                SARC s = new SARC();
-                s.Load(new MemoryStream(YAZ0.Decompress(dtpath)));
-                BfresRender dt_bfres = new BfresRender(s.files.Find(f => f.FileName == "output.bfres").FileData, dtpath);
-                for (int i = 0; i < dt_bfres.Textures.Count; i++)
-                {
-                    ((BfresRender)render).Textures.Add(dt_bfres.Textures.Keys.ElementAt(i), dt_bfres.Textures.Values.ElementAt(i));
-                }
-            }
-        }
+        //private void LoadDeliTextures(ref EditableObject render)
+        //{
+        //    if (render is BfresRender)
+        //    {
+        //        Console.WriteLine("Loading DeliTextures!");
+        //        var deliTex_sarc = new SARC();
+        //        string dtpath = EditorLoader.GetContentPath("Model/DeliTextures.Nin_NX_NVN.szs");
+        //        SARC s = new SARC();
+        //        s.Load(new MemoryStream(YAZ0.Decompress(dtpath)));
+        //        BfresRender dt_bfres = new BfresRender(s.files.Find(f => f.FileName == "output.bfres").FileData, dtpath);
+        //        for (int i = 0; i < dt_bfres.Textures.Count; i++)
+        //        {
+        //            ((BfresRender)render).Textures.Add(dt_bfres.Textures.Keys.ElementAt(i), dt_bfres.Textures.Values.ElementAt(i));
+        //        }
+        //    }
+        //} UNUSED
 
 
 
         //private EditableObject Create(Obj obj)
         private EditableObject Create(MuElement obj)
         {
-            Console.WriteLine($"Creating object with name: {obj.UnitConfigName}");
+            Console.WriteLine($"Creating object with name: {obj.Name}");
             string name = GetResourceName(obj);
             EditableObject render = new TransformableObject(Root);
 
-            var filePath = Obj.FindFilePath(Obj.GetResourceName(obj.UnitConfigName));
+            var filePath = Obj.FindFilePath(Obj.GetResourceName(obj.Name));
 
 
             //Don't load it for now if the model is already cached. It should load up instantly
@@ -491,10 +491,10 @@ namespace SampleMapEditor.LayoutEditor
                     render = new BfresRender(bfres.FileData, filePath, Root);
                     
                     // Apply DeliTextures to Shifty Stations
-                    if (name.StartsWith("Fld_Deli_Octa"))
-                    {
-                        LoadDeliTextures(ref render);
-                    }
+                    //if (name.StartsWith("Fld_Deli_Octa"))
+                    //{
+                    //    LoadDeliTextures(ref render);
+                    //}
                 }
 
                 //render = new BfresRender(filePath, Root);
@@ -508,10 +508,10 @@ namespace SampleMapEditor.LayoutEditor
             //Toggle models to use
             if (render is BfresRender)
             {
-                if (GlobalSettings.ActorDatabase.ContainsKey(obj.UnitConfigName))
+                if (GlobalSettings.ActorDatabase.ContainsKey(obj.Name))
                 {
                     //Obj requires specific model to display
-                    string modelName = GlobalSettings.ActorDatabase[obj.UnitConfigName].FmdbName; // ??? -
+                    string modelName = GlobalSettings.ActorDatabase[obj.Name].FmdbName; // ??? -
 #warning Not sure if Name should be changed to ResName or FmdbName
                     if (!string.IsNullOrEmpty(modelName))
                     {
@@ -772,31 +772,12 @@ namespace SampleMapEditor.LayoutEditor
             Type elem = typeof(MuElement);
             ByamlSerialize.SetMapObjType(ref elem, className);
             var inst = (MuElement)Activator.CreateInstance(elem);
-            inst.UnitConfigName = actorName;
+            inst.Name = actorName;
             var rend = Create(inst);
 
             Add(rend, true);
 
             var ob = rend.UINode.Tag as MuElement; //Obj;
-
-            /*//Reset parameters to defaults
-            if (ParamDatabase.ParameterDefaults.ContainsKey(ob.ObjId))
-                ob.Params = ParamDatabase.ParameterDefaults[ob.ObjId].ToList();*/
-
-            //Define some parameters based on the existing objects in the scene
-
-            /*//These types (start objects) are indexed individually with a unique index.
-            //They should spawn based on the placed index used
-            if (ob.ObjId == 6002)
-            {
-                int index = Root.Children.Where(x => ((Obj)x.Tag).ObjId == ob.ObjId).ToList().Count;
-                ob.Params[7] = index;
-            }
-            if (ob.ObjId == 8008)
-            {
-                int index = Root.Children.Where(x => ((Obj)x.Tag).ObjId == ob.ObjId).ToList().Count;
-                ob.Params[0] = index;
-            }*/
 
             GLContext.ActiveContext.Scene.DeselectAll(GLContext.ActiveContext);
 
@@ -813,7 +794,7 @@ namespace SampleMapEditor.LayoutEditor
             int index = render.UINode.Index;
             var obj = render.UINode.Tag as MuElement; // Obj;
             //obj.ObjId = id;
-            obj.UnitConfigName = actorName;
+            obj.Name = actorName;
 
             //Remove the previous renderer
             GLContext.ActiveContext.Scene.RemoveRenderObject(render);
@@ -862,8 +843,8 @@ namespace SampleMapEditor.LayoutEditor
             string name = "";
 
             //Use object database instead if exists
-            if (GlobalSettings.ActorDatabase.ContainsKey(obj.UnitConfigName))
-                name = GlobalSettings.ActorDatabase[obj.UnitConfigName].ResName;
+            if (GlobalSettings.ActorDatabase.ContainsKey(obj.Name))
+                name = GlobalSettings.ActorDatabase[obj.Name].ResName;
 
             return name;
         }
@@ -872,11 +853,11 @@ namespace SampleMapEditor.LayoutEditor
         private string GetNodeHeader(MuElement obj)
         {
             //string name = GlobalSettings.ObjectList.ContainsKey(obj.ObjId) ? $"{GlobalSettings.ObjectList[obj.ObjId]}" : obj.ObjId.ToString();
-            string name = obj.UnitConfigName;   //string name = "???";
+            string name = obj.Name;   //string name = "???";
             //Use object database instead if exists
-            if (GlobalSettings.ActorDatabase.ContainsKey(obj.UnitConfigName))
+            if (GlobalSettings.ActorDatabase.ContainsKey(obj.Name))
             {
-                name = GlobalSettings.ActorDatabase[obj.UnitConfigName].Name;
+                name = GlobalSettings.ActorDatabase[obj.Name].Name;
             }
 #warning ^^ Not sure if FmdbName is correct here. Check again later. -- Update: it wasn't. Name is correct.
 
