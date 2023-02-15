@@ -35,7 +35,7 @@ namespace SampleMapEditor.LayoutEditor
         public List<MenuItemModel> MenuItems { get; set; } = new List<MenuItemModel>();
 
         //int SpawnObjectID = 1018;
-        string SpawnObjectName = "RespawnPos";
+        string SpawnObjectName = "Obj_RespawnPos";
 
         public List<NodeBase> GetSelected()
         {
@@ -778,6 +778,25 @@ namespace SampleMapEditor.LayoutEditor
             Add(rend, true);
 
             var ob = rend.UINode.Tag as MuElement; //Obj;
+
+            /*//Reset parameters to defaults
+            if (ParamDatabase.ParameterDefaults.ContainsKey(ob.ObjId))
+                ob.Params = ParamDatabase.ParameterDefaults[ob.ObjId].ToList();*/
+
+            //Define some parameters based on the existing objects in the scene
+
+            /*//These types (start objects) are indexed individually with a unique index.
+            //They should spawn based on the placed index used
+            if (ob.ObjId == 6002)
+            {
+                int index = Root.Children.Where(x => ((Obj)x.Tag).ObjId == ob.ObjId).ToList().Count;
+                ob.Params[7] = index;
+            }
+            if (ob.ObjId == 8008)
+            {
+                int index = Root.Children.Where(x => ((Obj)x.Tag).ObjId == ob.ObjId).ToList().Count;
+                ob.Params[0] = index;
+            }*/
 
             GLContext.ActiveContext.Scene.DeselectAll(GLContext.ActiveContext);
 
