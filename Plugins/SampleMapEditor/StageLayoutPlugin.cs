@@ -16,10 +16,10 @@ namespace SampleMapEditor
 {
     public class StageLayoutPlugin : FileEditor, IFileFormat
     {
-        //public string[] Description => new string[] { "Byaml" };
-        //public string[] Extension => new string[] { "*.byaml" };
-        public string[] Description => new string[] { "Stage Layout Data" };
-        public string[] Extension => new string[] { "*.zs" };
+        public string[] Description => new string[] { "Byml" };
+        public string[] Extension => new string[] { "*.byml" };
+        //public string[] Description => new string[] { "Stage Layout Data" };
+        //public string[] Extension => new string[] { "*.zs" };
 
         /// <summary>
         /// Wether or not the file can be saved.
@@ -66,8 +66,8 @@ namespace SampleMapEditor
         public bool Identify(File_Info fileInfo, Stream stream)
         {
             //Just load maps from checking the byaml extension atm.
-            //return fileInfo.Extension == ".byaml";
-            return fileInfo.Extension == ".zs";
+            return fileInfo.Extension == ".byml";
+            //return fileInfo.Extension == ".zs";
         }
 
 
@@ -105,9 +105,9 @@ namespace SampleMapEditor
             Root.Tag = this;
 
             //FileInfo.FileName = "course_muunt.byaml";
-            //FileInfo.FileName = "Fld_Test01_Vss.byaml";
-            FileInfo.FileName = "Vss_CustomStage.szs";
-            FileInfo.Compression = new Yaz0();
+            FileInfo.FileName = "Vss_CustomStage01.bcett.byml";
+            //FileInfo.FileName = "Vss_CustomStage.szs";
+            //FileInfo.Compression = new Yaz0();
 
             Setup(MapLoader);
 
@@ -361,7 +361,7 @@ namespace SampleMapEditor
 
             // Objs / Rails (?)
             Editors.Add(new ObjectEditor(this, stage.Objs));
-            Editors.Add(new RailEditor(this, colorSettings.RailColor, stage.Rails));
+            //Editors.Add(new RailEditor(this, colorSettings.RailColor, stage.Rails));
 
 
 

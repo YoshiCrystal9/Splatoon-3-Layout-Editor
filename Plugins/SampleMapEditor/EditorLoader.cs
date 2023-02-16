@@ -13,6 +13,8 @@ using CafeLibrary.Rendering;
 using Syroot.Maths;
 using Vector3 = OpenTK.Vector3;
 using Vector2 = OpenTK.Vector2;
+using static System.Net.WebRequestMethods;
+using File = System.IO.File;
 
 namespace SampleMapEditor
 {
@@ -30,7 +32,7 @@ namespace SampleMapEditor
         /// <summary>
         /// The extension of the plugin. This should match whatever file you plan to open.
         /// </summary>
-        public string[] Extension => new string[] { "*.szs2" };
+        public string[] Extension => new string[] { "*.byml" };
 
         /// <summary>
         /// Determines if the plugin can save or not.
@@ -49,7 +51,7 @@ namespace SampleMapEditor
         /// </summary>
         public bool Identify(File_Info fileInfo, Stream stream)
         {
-            return fileInfo.Extension == ".szs2";
+            return fileInfo.Extension == ".byml";
         }
 
 
@@ -86,8 +88,8 @@ namespace SampleMapEditor
             public bool IsCalcNodePushBack { get; set; }
             public bool IsFarActor { get; set; }
             public bool IsNotTurnToActor { get; set; }
-            public float ModelAabbMax { get; set; }
-            public float ModelAabbMin { get; set; }
+            public Vector3 ModelAabbMax { get; set; }
+            public Vector3 ModelAabbMin { get; set; }
             public string __RowId { get; set; }
 
 
@@ -146,32 +148,33 @@ namespace SampleMapEditor
         {
             //string mushPackPath = $"{PluginConfig.S2GamePath}/Pack/Mush.release.pack";
             string mushPackPath = GetContentPath("RSDB/ActorInfo.Product.200.rstbl.byml.zs");
-            SARC mushSARC = new SARC();
-
-            // Load Mush.release.pack
-            using (FileReader r = new FileReader(mushPackPath))
-            {
-                mushSARC.Load(r.BaseStream);
-            }
-
-            // Find ActorDb
             BymlFileData actorDbByml = new BymlFileData();
-            foreach (var file in mushSARC.Files)
-            {
-                if (file.FileName.Contains("ActorDb"))
-                {
-                    Console.WriteLine("Found ActorDb!");
-                    if (Nisasyst.IsEncrypted(file.FileData))
-                    {
-                        actorDbByml = ByamlFile.LoadN(new MemoryStream(file.AsBytes()));
-                    }
-                    else
-                    {
-                        actorDbByml = ByamlFile.LoadN(new MemoryStream(file.AsBytes()));
-                    }
-                }
-                Console.WriteLine($"{file.FileName} {(Nisasyst.IsEncrypted(file.FileData) ? "is" : "is not")} Nisasyst encrypted.");
-            }
+            //SARC mushSARC = new SARC();
+            actorDbByml = ByamlFile.LoadN(mushPackPath, true);
+            // Load Mush.release.pack
+            //using (FileReader r = new FileReader(mushPackPath))
+            //{
+            //    mushSARC.Load(r.BaseStream);
+            //}
+
+            //// Find ActorDb
+            //BymlFileData actorDbByml = new BymlFileData();
+            //foreach (var file in mushSARC.Files)
+            //{
+            //    if (file.FileName.Contains("ActorDb"))
+            //    {
+            //        Console.WriteLine("Found ActorDb!");
+            //        if (Nisasyst.IsEncrypted(file.FileData))
+            //        {
+            //            actorDbByml = ByamlFile.LoadN(new MemoryStream(file.AsBytes()));
+            //        }
+            //        else
+            //        {
+            //            actorDbByml = ByamlFile.LoadN(new MemoryStream(file.AsBytes()));
+            //        }
+            //    }
+            //    Console.WriteLine($"{file.FileName} {(Nisasyst.IsEncrypted(file.FileData) ? "is" : "is not")} Nisasyst encrypted.");
+            //}
 
             if (actorDbByml == null) return;
 
@@ -191,7 +194,7 @@ namespace SampleMapEditor
             Actor actor = Actors.Find(x => x.__RowId == name);
             if (actor == null) return null;
             if (actor.Fmdb == "") return null;
-            return GetContentPath($"Model/{actor.Fmdb}.bfres.zs");
+            return GetContentPath($"Model/{actor.__RowId}.bfres.zs");
         }
 
         public string GetModelPathFromObject(dynamic obj)

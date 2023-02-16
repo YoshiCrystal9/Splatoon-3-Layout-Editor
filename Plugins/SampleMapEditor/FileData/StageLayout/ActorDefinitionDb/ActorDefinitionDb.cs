@@ -80,28 +80,30 @@ namespace SampleMapEditor
 
         private void Load(Stream stream)
         {
-            //BymlData = ByamlFile.LoadN(stream, true);
-            //ByamlSerialize.Deserialize(this, BymlData.RootNode);
+            BymlData = ByamlFile.LoadN(stream, true);
+            Console.WriteLine(BymlData);
+            ByamlSerialize.Deserialize(this, BymlData.RootNode);
+            Console.WriteLine(BymlData.RootNode);
 
-            SARC mushy = new SARC();
-            mushy.Load(stream);
+            //SARC mushy = new SARC();
+            //mushy.Load(stream);
 
-            foreach (var file in mushy.Files)
-            {
-                if (file.FileName.Contains("ActorDb"))
-                {
-                    Console.WriteLine("Found ActorDb!");
-                    if (Nisasyst.IsEncrypted(file.FileData))
-                    {
-                        BymlData = Nisasyst.DecryptByaml((SARC.FileEntry)file);
-                    }
-                    else
-                    {
-                        BymlData = ByamlFile.LoadN(new MemoryStream(file.AsBytes()));
-                    }
-                }
-                Console.WriteLine($"{file.FileName} {(Nisasyst.IsEncrypted(file.FileData) ? "is" : "is not")} Nisasyst encrypted.");    // DEBUG PRINT
-            }
+            //foreach (var file in mushy.Files)
+            //{
+            //    if (file.FileName.Contains("ActorDb"))
+            //    {
+            //        Console.WriteLine("Found ActorDb!");
+            //        if (Nisasyst.IsEncrypted(file.FileData))
+            //        {
+            //            BymlData = Nisasyst.DecryptByaml((SARC.FileEntry)file);
+            //        }
+            //        else
+            //        {
+            //            BymlData = ByamlFile.LoadN(new MemoryStream(file.AsBytes()));
+            //        }
+            //    }
+            //    Console.WriteLine($"{file.FileName} {(Nisasyst.IsEncrypted(file.FileData) ? "is" : "is not")} Nisasyst encrypted.");    // DEBUG PRINT
+            //}
 
             if (BymlData == null) { Console.WriteLine("Failed to find ActorDb!"); return; }
 

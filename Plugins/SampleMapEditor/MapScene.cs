@@ -83,19 +83,19 @@ namespace SampleMapEditor
                     //loader.GetActorFromObj(mapObj).FmdbName
                     //loader.Actors.Find(x => x.FmdbName == )
 
-                    string fmdbname = loader.GetActorFromObj(mapObj).FmdbName;
-                    if (fmdbname.StartsWith("Fld_Deli_"))
-                    {
-                        Console.WriteLine("Loading DeliTextures!");
-                        var deliTex_sarc = new SARC();
-                        string dtpath = EditorLoader.GetContentPath("Model/DeliTextures.Nin_NX_NVN.szs");
-                        s.Load(new MemoryStream(YAZ0.Decompress(dtpath)));
-                        BfresRender dt_bfres = new BfresRender(s.files.Find(f => f.FileName == "output.bfres").FileData, dtpath);
-                        for (int i = 0; i < dt_bfres.Textures.Count; i++)
-                        {
-                            o.Textures.Add(dt_bfres.Textures.Keys.ElementAt(i), dt_bfres.Textures.Values.ElementAt(i));
-                        }
-                    }
+                    //string fmdbname = loader.GetActorFromObj(mapObj).FmdbName;
+                    //if (fmdbname.StartsWith("Fld_Deli_"))
+                    //{
+                    //    Console.WriteLine("Loading DeliTextures!");
+                    //    var deliTex_sarc = new SARC();
+                    //    string dtpath = EditorLoader.GetContentPath("Model/DeliTextures.Nin_NX_NVN.szs");
+                    //    s.Load(new MemoryStream(YAZ0.Decompress(dtpath)));
+                    //    BfresRender dt_bfres = new BfresRender(s.files.Find(f => f.FileName == "output.bfres").FileData, dtpath);
+                    //    for (int i = 0; i < dt_bfres.Textures.Count; i++)
+                    //    {
+                    //        o.Textures.Add(dt_bfres.Textures.Keys.ElementAt(i), dt_bfres.Textures.Values.ElementAt(i));
+                    //    }
+                    //}
 
                     objFolder.AddChild(o.UINode);
                     o.UINode.Header = mapObj["Name"];
