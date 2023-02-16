@@ -1,8 +1,9 @@
-# Splatoon 2 Stage Layout Editor
-A Stage Layout viewer for Splatoon 2! (Made using KillzX's Sample-Editor)
+# Splatoon 3 Stage Layout Viewer
+A Stage Layout viewer for Splatoon 3! (Made using KillzX's Sample-Editor and Sheldon10095's Splatoon 2 Stage Layout Editor)
 
 ## Notes
-- Saving has not yet been implemented!
+- Models don't load
+- They don't have any position in the 3D space
 
 ## Libraries
 
@@ -11,7 +12,6 @@ A Stage Layout viewer for Splatoon 2! (Made using KillzX's Sample-Editor)
 - Toolbox.Core : A small, portable backend used for file IO to read/write data along with commonly shared things like texture swizzling and decoding. 
 
 ## Todo:
-- Add an Object Selector to let the user pick from different objects to place in the stage
-- Finish defining the Obj class
-- Rails.
-- etc.
+- Add ZSTD support for bfres
+- Fix position stuff
+- idk
