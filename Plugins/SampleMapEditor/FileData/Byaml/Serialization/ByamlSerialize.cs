@@ -25,27 +25,7 @@ namespace SampleMapEditor
 
             if (value is Dictionary<string, dynamic>) bymlProperties = (Dictionary<string, dynamic>)value;
             else throw new Exception("Not a dictionary");
-            
-            //Console.ResetColor();
             Console.WriteLine();
-            /*if (section is MuElement)
-            {
-                Console.ForegroundColor = ConsoleColor.Cyan;
-                Console.WriteLine($"section is type: {section}");
-                string classname = MuElement.GetActorClassName((MuElement)section);
-                Console.WriteLine(classname);
-                Console.ResetColor();
-                switch (classname)
-                {
-                    case "Field":
-                        break;
-                    case "DesignerObj":
-                        Console.WriteLine($"RailableParams::AttCalc: {((DesignerObj)section).RailableParams__AttCalc}");
-                        break;
-                    default:
-                        break;
-                }
-            }*/
 
 
             if (section is IByamlSerializable)
@@ -145,29 +125,12 @@ namespace SampleMapEditor
 
                 for (int j = 0; j < list.Count; j++)
                 {
-                    if (property.GetPropertyValue("Name").ToString() == "Objs")
+                    if (property.GetPropertyValue("Name").ToString() == "Actors")
                     {
                         string className = MuElement.GetActorClassName(list[j]);
                         if (className.Length == 0) className = list[j]["Name"];
 
                         SetMapObjType(ref elementType, className);
-
-                        /*Console.WriteLine($"Using Class Name: {className}");
-                        switch (className)
-                        {
-                            case "DesignerObj":
-                                elementType = typeof(DesignerObj);
-                                break;
-                            case "Lift":
-                                elementType = typeof(Lift);
-                                break;
-                            case "Field":
-                                // Keep as MuElement
-                                break;
-                            default:
-                                elementType = typeof(MuObj);
-                                break;
-                        }*/
                     }
 
                     if (list[j] is IDictionary<string, dynamic>)
