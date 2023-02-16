@@ -127,54 +127,28 @@ namespace SampleMapEditor
 
         public List<dynamic> MapObjList { get; set; } = new List<dynamic>();
 
-        //public static Vector3 GetObjPos(dynamic obj)
-        //{
-        //    var t = obj["Translate"];
-        //    return new Vector3(t["X"], t["Y"], t["Z"]);
-        //}
-        //public static Vector3 GetObjScale(dynamic obj)
-        //{
-        //    var t = obj["Scale"];
-        //    return new Vector3(t["X"], t["Y"], t["Z"]);
-        //}
-        //public static Vector3 GetObjRotation(dynamic obj)
-        //{
-        //    var t = obj["Rotate"];
-        //    return new Vector3(t["X"], t["Y"], t["Z"]);
-        //}
+        public static Vector3 GetObjPos(dynamic obj)
+        {
+            var t = obj["Translate"];
+            return new Vector3(t["X"], t["Y"], t["Z"]);
+        }
+        public static Vector3 GetObjScale(dynamic obj)
+        {
+            var t = obj["Scale"];
+            return new Vector3(t["X"], t["Y"], t["Z"]);
+        }
+        public static Vector3 GetObjRotation(dynamic obj)
+        {
+            var t = obj["Rotate"];
+            return new Vector3(t["X"], t["Y"], t["Z"]);
+        }
 
 
         private void ParseActorDb()
         {
-            //string mushPackPath = $"{PluginConfig.S2GamePath}/Pack/Mush.release.pack";
             string mushPackPath = GetContentPath("RSDB/ActorInfo.Product.200.rstbl.byml");
             BymlFileData actorDbByml = new BymlFileData();
-            //SARC mushSARC = new SARC();
             actorDbByml = ByamlFile.LoadN(mushPackPath, true);
-            // Load Mush.release.pack
-            //using (FileReader r = new FileReader(mushPackPath))
-            //{
-            //    mushSARC.Load(r.BaseStream);
-            //}
-
-            //// Find ActorDb
-            //BymlFileData actorDbByml = new BymlFileData();
-            //foreach (var file in mushSARC.Files)
-            //{
-            //    if (file.FileName.Contains("ActorDb"))
-            //    {
-            //        Console.WriteLine("Found ActorDb!");
-            //        if (Nisasyst.IsEncrypted(file.FileData))
-            //        {
-            //            actorDbByml = ByamlFile.LoadN(new MemoryStream(file.AsBytes()));
-            //        }
-            //        else
-            //        {
-            //            actorDbByml = ByamlFile.LoadN(new MemoryStream(file.AsBytes()));
-            //        }
-            //    }
-            //    Console.WriteLine($"{file.FileName} {(Nisasyst.IsEncrypted(file.FileData) ? "is" : "is not")} Nisasyst encrypted.");
-            //}
 
             if (actorDbByml == null) return;
 

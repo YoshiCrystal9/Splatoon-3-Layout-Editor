@@ -101,9 +101,9 @@ namespace SampleMapEditor
                     objFolder.AddChild(o.UINode);
                     o.UINode.Header = mapObj["Name"];
                     o.UINode.Icon = IconManager.MESH_ICON.ToString();
-                    //o.Transform.Position = EditorLoader.GetObjPos(mapObj);
-                    //o.Transform.Scale = EditorLoader.GetObjScale(mapObj);
-                    //o.Transform.RotationEulerDegrees = EditorLoader.GetObjRotation(mapObj);
+                    o.Transform.Position = EditorLoader.GetObjPos(mapObj);
+                    o.Transform.Scale = EditorLoader.GetObjScale(mapObj);
+                    o.Transform.RotationEulerDegrees = EditorLoader.GetObjRotation(mapObj);
                     o.Transform.UpdateMatrix(true);
                     loader.AddRender(o);
                 }
@@ -113,60 +113,14 @@ namespace SampleMapEditor
                     //CustomBoundingBoxRender o = new CustomBoundingBoxRender(objFolder);
                     o.UINode.Header = mapObj["Name"];
                     o.UINode.Icon = IconManager.MESH_ICON.ToString();
-                    //o.Transform.Position = EditorLoader.GetObjPos(mapObj);
-                    //o.Transform.Scale = EditorLoader.GetObjScale(mapObj);
-                    //o.Transform.RotationEulerDegrees = EditorLoader.GetObjRotation(mapObj);
-                    //o.Color = new Vector4(0.5F, 0.5F, 0.5F, 0.5F);
+                    o.Transform.Position = EditorLoader.GetObjPos(mapObj);
+                    o.Transform.Scale = EditorLoader.GetObjScale(mapObj);
+                    o.Transform.RotationEulerDegrees = EditorLoader.GetObjRotation(mapObj);
+                    o.Color = new Vector4(0.5F, 0.5F, 0.5F, 0.5F);
                     o.Transform.UpdateMatrix(true);
                     loader.AddRender(o);
-
-
-                    //var min = o.Boundings.Box.Min;
-                    //var max = o.Boundings.Box.Max;
-
-                    //BoundingBoxRender bbox = new BoundingBoxRender(min, max);
-                    
-                    //loader.AddRender(o);
                 }
-
-
-
-                //Vector3F pos = 
-
-                /*TransformableObject testOBJ = new TransformableObject(objFolder);
-                testOBJ.UINode.Header = mapObj["Name"];
-                testOBJ.UINode.Icon = IconManager.MESH_ICON.ToString();
-                testOBJ.Transform.Position = loader.GetObjPos(mapObj);
-                testOBJ.Transform.Scale = loader.GetObjScale(mapObj);
-                testOBJ.Transform.RotationEulerDegrees = loader.GetObjRotation(mapObj);
-                testOBJ.Transform.UpdateMatrix(true);
-                loader.AddRender(testOBJ);*/
-                
             }
-
-            /*//Console.WriteLine("Attempt to load model...");
-            int i = 0;
-            string path = loader.GetModelPathFromObject(loader.MapObjList[i]);
-            //SARC s = new SARC();
-            s.Load(new MemoryStream(YAZ0.Decompress(path)));
-            BfresRender br = new BfresRender(s.files.Find(f => f.FileName == "output.bfres").FileData, path);
-            br.Models.ForEach(model => { if (model.Name != loader.MapObjList[i]["Name"]) model.IsVisible = false; });
-            br.UINode.Header = "TESTING MODEL";
-            br.UINode.Icon = IconManager.MESH_ICON.ToString();
-            *//*br.Transform.Position = loader.GetObjPos(loader.MapObjList[i]);
-            br.Transform.Scale = loader.GetObjScale(loader.MapObjList[i]);
-            br.Transform.RotationEuler = loader.GetObjRotation(loader.MapObjList[i]);*//*
-            br.Transform.Position = EditorLoader.GetObjPos(loader.MapObjList[i]);
-            br.Transform.Scale = EditorLoader.GetObjScale(loader.MapObjList[i]);
-            br.Transform.RotationEulerDegrees = EditorLoader.GetObjRotation(loader.MapObjList[i]);
-
-            br.Transform.UpdateMatrix(true);
-            loader.AddRender(br);*/
-
-            //loader.model1.Root.Children[0].
-            //CafeLibrary.FMDL fmdl = loader.model1.ModelFolder.Models[0];
-            //loader.AddRender(fmdl.BfresWrapper.Renderer);
-            //loader.AddRender(loader.model1.Root.Children[0].);
 
             //A folder to represent in the outliner UI
             NodeBase folder = new NodeBase("Actors");
