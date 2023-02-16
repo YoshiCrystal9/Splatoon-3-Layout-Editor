@@ -237,83 +237,17 @@ namespace SampleMapEditor
             Console.WriteLine($"Using Class Name: {className}");
             switch (className)
             {
-                case "DesignerObj":
-                    type = typeof(DesignerObj);
+                case "GameActor":
+                    type = typeof(GameActor);
                     break;
-                case "Lift":
-                    type = typeof(Lift);
+                case "SplActor":
+                    type = typeof(SplActor);
                     break;
-                // DesignerObjNoCulling
-                case "Field":
-                    // Keep as MuElement
+                case "SplNpcPlayerActor":
+                    type = typeof(SplNpcPlayerActor);
                     break;
-
-                // 56
-                case "Jerry":
-                    type = typeof(Jerry);
-                    break;
-
-                // 16
-                case "Sponge":
-                    type = typeof(Sponge);
-                    break;
-
-                case "SpongeVersus":
-                    type = typeof(SpongeVersus);
-                    break;
-
-                // 6
-                case "PlazaDoor":
-                    type = typeof(PlazaDoor);
-                    break;
-
-                // 2
-                case "PaintTargetArea":
-                    type = typeof(PaintTargetArea);
-                    break;
-                case "Bird":
-                    type = typeof(Bird);
-                    break;
-                case "InkRailVersus":
-                    type = typeof(InkRailVersus);
-                    break;
-                
-                // 1
-                case "Gachihoko":
-                    type = typeof(Gachihoko);
-                    break;
-                case "Geyser":
-                    type = typeof(Geyser);
-                    break;
-                case "VictoryLift":
-                    type = typeof(VictoryLift);
-                    break;
-                case "PlazaNpcLocator":
-                    type = typeof(PlazaNpcLocator);
-                    break;
-                case "PlazaJerryLocator":
-                    type = typeof(PlazaJerryLocator);
-                    break;
-                case "SpectatorCameraBoundingArea":
-                    type = typeof(SpectatorCameraBoundingArea);
-                    break;
-                case "VictoryClamBankEmitArea":
-                    type = typeof(VictoryClamBankEmitArea);
-                    break;
-                case "VictoryClamBasket":
-                    type = typeof(VictoryClamBasket);
-                    break;
-                case "VictoryClamSpawnPoint":
-                    type = typeof(VictoryClamSpawnPoint);
-                    break;
-
-                // ~0~
-                case "MapPaintableChanger":
-                    type = typeof(MapPaintableChanger);
-                    break;
-
-                default:
-                    type = typeof(MuObj);
+                case "SplPlayerActor":
+                    type = typeof(SplPlayerActor);
                     break;
             }
             Console.WriteLine($"  Using: {type.Name}");
