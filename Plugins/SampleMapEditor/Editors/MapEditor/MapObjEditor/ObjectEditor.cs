@@ -35,7 +35,7 @@ namespace SampleMapEditor.LayoutEditor
         public List<MenuItemModel> MenuItems { get; set; } = new List<MenuItemModel>();
 
         //int SpawnObjectID = 1018;
-        string SpawnObjectName = "RespawnPos";
+        string SpawnObjectName = "Obj_RespawnPos";
 
         public List<NodeBase> GetSelected()
         {
@@ -435,22 +435,22 @@ namespace SampleMapEditor.LayoutEditor
 
 
 
-        private void LoadDeliTextures(ref EditableObject render)
-        {
-            if (render is BfresRender)
-            {
-                Console.WriteLine("Loading DeliTextures!");
-                var deliTex_sarc = new SARC();
-                string dtpath = EditorLoader.GetContentPath("Model/DeliTextures.Nin_NX_NVN.szs");
-                SARC s = new SARC();
-                s.Load(new MemoryStream(YAZ0.Decompress(dtpath)));
-                BfresRender dt_bfres = new BfresRender(s.files.Find(f => f.FileName == "output.bfres").FileData, dtpath);
-                for (int i = 0; i < dt_bfres.Textures.Count; i++)
-                {
-                    ((BfresRender)render).Textures.Add(dt_bfres.Textures.Keys.ElementAt(i), dt_bfres.Textures.Values.ElementAt(i));
-                }
-            }
-        }
+        //private void LoadDeliTextures(ref EditableObject render)
+        //{
+        //    if (render is BfresRender)
+        //    {
+        //        Console.WriteLine("Loading DeliTextures!");
+        //        var deliTex_sarc = new SARC();
+        //        string dtpath = EditorLoader.GetContentPath("Model/DeliTextures.Nin_NX_NVN.szs");
+        //        SARC s = new SARC();
+        //        s.Load(new MemoryStream(YAZ0.Decompress(dtpath)));
+        //        BfresRender dt_bfres = new BfresRender(s.files.Find(f => f.FileName == "output.bfres").FileData, dtpath);
+        //        for (int i = 0; i < dt_bfres.Textures.Count; i++)
+        //        {
+        //            ((BfresRender)render).Textures.Add(dt_bfres.Textures.Keys.ElementAt(i), dt_bfres.Textures.Values.ElementAt(i));
+        //        }
+        //    }
+        //}
 
 
 
@@ -491,10 +491,10 @@ namespace SampleMapEditor.LayoutEditor
                     render = new BfresRender(bfres.FileData, filePath, Root);
                     
                     // Apply DeliTextures to Shifty Stations
-                    if (name.StartsWith("Fld_Deli_Octa"))
-                    {
-                        LoadDeliTextures(ref render);
-                    }
+                    //if (name.StartsWith("Fld_Deli_Octa"))
+                    //{
+                    //    LoadDeliTextures(ref render);
+                    //}
                 }
 
                 //render = new BfresRender(filePath, Root);
@@ -666,29 +666,6 @@ namespace SampleMapEditor.LayoutEditor
         private void UpdateObjectLinks(EditableObject render)
         {
             render.DestObjectLinks.Clear();
-
-            /*var obj = render.UINode.Tag as Obj;
-            foreach (var linkableObject in GLContext.ActiveContext.Scene.Objects)
-            {
-                if (linkableObject is RenderablePath)
-                {
-                    var path = linkableObject as RenderablePath;
-                    TryFindPathLink(render, path, obj.Path, obj.PathPoint);
-                    TryFindPathLink(render, path, obj.LapPath, obj.LapPathPoint);
-                    TryFindPathLink(render, path, obj.ObjPath, obj.ObjPathPoint);
-                    TryFindPathLink(render, path, obj.EnemyPath1, null);
-                    TryFindPathLink(render, path, obj.EnemyPath2, null);
-                    TryFindPathLink(render, path, obj.ItemPath1, null);
-                    TryFindPathLink(render, path, obj.ItemPath2, null);
-
-                }
-                else if (linkableObject is EditableObject)
-                {
-                    var editObj = linkableObject as EditableObject;
-                    TryFindObjectLink(render, editObj, obj.ParentArea);
-                    TryFindObjectLink(render, editObj, obj.ParentObj);
-                }
-            }*/
         }
 
         private void TryFindObjectLink(EditableObject render, EditableObject obj, object objInstance)
