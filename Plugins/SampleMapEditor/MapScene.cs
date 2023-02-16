@@ -29,7 +29,7 @@ namespace SampleMapEditor
         /// </summary>
         private void SetupObjects(EditorLoader loader)
         {
-            NodeBase objFolder = new NodeBase("Objs");
+            NodeBase objFolder = new NodeBase("Actors");
             //objFolder.HasCheckBox = true;
             loader.Root.AddChild(objFolder);
             NodeBase railsFolder = new NodeBase("Rails");
@@ -39,9 +39,10 @@ namespace SampleMapEditor
             bool HasModel(string mpath, out SARC s)
             {
                 s = new SARC();
-                s.Load(new MemoryStream(YAZ0.Decompress(mpath)));
-                foreach (var f in s.files) if (f.FileName == "output.bfres") return true;
                 return false;
+               //s.Load(new MemoryStream(YAZ0.Decompress(mpath)));
+                //foreach (var f in s.files) if (f.FileName == "output.bfres") return true;
+                //return false;
             }
 
             foreach (var mapObj in loader.MapObjList)
@@ -100,9 +101,9 @@ namespace SampleMapEditor
                     objFolder.AddChild(o.UINode);
                     o.UINode.Header = mapObj["Name"];
                     o.UINode.Icon = IconManager.MESH_ICON.ToString();
-                    o.Transform.Position = EditorLoader.GetObjPos(mapObj);
-                    o.Transform.Scale = EditorLoader.GetObjScale(mapObj);
-                    o.Transform.RotationEulerDegrees = EditorLoader.GetObjRotation(mapObj);
+                    //o.Transform.Position = EditorLoader.GetObjPos(mapObj);
+                    //o.Transform.Scale = EditorLoader.GetObjScale(mapObj);
+                    //o.Transform.RotationEulerDegrees = EditorLoader.GetObjRotation(mapObj);
                     o.Transform.UpdateMatrix(true);
                     loader.AddRender(o);
                 }
@@ -112,9 +113,9 @@ namespace SampleMapEditor
                     //CustomBoundingBoxRender o = new CustomBoundingBoxRender(objFolder);
                     o.UINode.Header = mapObj["Name"];
                     o.UINode.Icon = IconManager.MESH_ICON.ToString();
-                    o.Transform.Position = EditorLoader.GetObjPos(mapObj);
-                    o.Transform.Scale = EditorLoader.GetObjScale(mapObj);
-                    o.Transform.RotationEulerDegrees = EditorLoader.GetObjRotation(mapObj);
+                    //o.Transform.Position = EditorLoader.GetObjPos(mapObj);
+                    //o.Transform.Scale = EditorLoader.GetObjScale(mapObj);
+                    //o.Transform.RotationEulerDegrees = EditorLoader.GetObjRotation(mapObj);
                     //o.Color = new Vector4(0.5F, 0.5F, 0.5F, 0.5F);
                     o.Transform.UpdateMatrix(true);
                     loader.AddRender(o);
@@ -168,7 +169,7 @@ namespace SampleMapEditor
             //loader.AddRender(loader.model1.Root.Children[0].);
 
             //A folder to represent in the outliner UI
-            NodeBase folder = new NodeBase("Objects");
+            NodeBase folder = new NodeBase("Actors");
             //Allow toggling visibility for the folder
             folder.HasCheckBox = true;
             //Add it to the root of our loader

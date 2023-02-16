@@ -127,21 +127,21 @@ namespace SampleMapEditor
 
         public List<dynamic> MapObjList { get; set; } = new List<dynamic>();
 
-        public static Vector3 GetObjPos(dynamic obj)
-        {
-            var t = obj["Translate"];
-            return new Vector3(t["X"], t["Y"], t["Z"]);
-        }
-        public static Vector3 GetObjScale(dynamic obj)
-        {
-            var t = obj["Scale"];
-            return new Vector3(t["X"], t["Y"], t["Z"]);
-        }
-        public static Vector3 GetObjRotation(dynamic obj)
-        {
-            var t = obj["Rotate"];
-            return new Vector3(t["X"], t["Y"], t["Z"]);
-        }
+        //public static Vector3 GetObjPos(dynamic obj)
+        //{
+        //    var t = obj["Translate"];
+        //    return new Vector3(t["X"], t["Y"], t["Z"]);
+        //}
+        //public static Vector3 GetObjScale(dynamic obj)
+        //{
+        //    var t = obj["Scale"];
+        //    return new Vector3(t["X"], t["Y"], t["Z"]);
+        //}
+        //public static Vector3 GetObjRotation(dynamic obj)
+        //{
+        //    var t = obj["Rotate"];
+        //    return new Vector3(t["X"], t["Y"], t["Z"]);
+        //}
 
 
         private void ParseActorDb()
