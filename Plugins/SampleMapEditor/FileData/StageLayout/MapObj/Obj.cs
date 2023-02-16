@@ -184,8 +184,8 @@ namespace SampleMapEditor
         public static string GetResourceName(string actorName)
         {
             var db = GlobalSettings.ActorDatabase;
-            if (db.ContainsKey(actorName) && db[actorName].FmdbName.Length > 0)
-                return db[actorName].ResName;
+            if (db.ContainsKey(actorName) && db[actorName].__RowId.Length > 0)
+                return db[actorName].__RowId;
             else
                 return "";
         }

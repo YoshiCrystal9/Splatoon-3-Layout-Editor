@@ -132,7 +132,7 @@ namespace SampleMapEditor.LayoutEditor
             //Selector popup window instance
             if (ObjectSelector == null)
             {
-                var objects = GlobalSettings.ActorDatabase.Values.OrderBy(x => x.Name).ToList();
+                var objects = GlobalSettings.ActorDatabase.Values.OrderBy(x => x.__RowId).ToList();
                 ObjectSelector = new MapObjectSelector(objects);
                 ObjectSelector.CloseOnSelect = true;
                 //Update current spawn id when selection is changed // ??? ~~~ Remove comment ~~~
@@ -511,7 +511,7 @@ namespace SampleMapEditor.LayoutEditor
                 if (GlobalSettings.ActorDatabase.ContainsKey(obj.Name))
                 {
                     //Obj requires specific model to display
-                    string modelName = GlobalSettings.ActorDatabase[obj.Name].FmdbName; // ??? -
+                    string modelName = GlobalSettings.ActorDatabase[obj.Name].__RowId; // ??? -
 #warning Not sure if Name should be changed to ResName or FmdbName
                     if (!string.IsNullOrEmpty(modelName))
                     {
@@ -863,7 +863,7 @@ namespace SampleMapEditor.LayoutEditor
 
             //Use object database instead if exists
             if (GlobalSettings.ActorDatabase.ContainsKey(obj.Name))
-                name = GlobalSettings.ActorDatabase[obj.Name].ResName;
+                name = GlobalSettings.ActorDatabase[obj.Name].__RowId;
 
             return name;
         }
@@ -876,7 +876,7 @@ namespace SampleMapEditor.LayoutEditor
             //Use object database instead if exists
             if (GlobalSettings.ActorDatabase.ContainsKey(obj.Name))
             {
-                name = GlobalSettings.ActorDatabase[obj.Name].Name;
+                name = GlobalSettings.ActorDatabase[obj.Name].__RowId;
             }
 #warning ^^ Not sure if FmdbName is correct here. Check again later. -- Update: it wasn't. Name is correct.
 
@@ -901,7 +901,7 @@ namespace SampleMapEditor.LayoutEditor
 
         private void AddObjectMenuAction()
         {
-            var objects = GlobalSettings.ActorDatabase.Values.OrderBy(x => x.Name).ToList();
+            var objects = GlobalSettings.ActorDatabase.Values.OrderBy(x => x.__RowId).ToList();
 
             MapObjectSelector selector = new MapObjectSelector(objects);
             MapStudio.UI.DialogHandler.Show(TranslationSource.GetText("SELECT_OBJECT"), 400, 800, () =>
@@ -924,7 +924,7 @@ namespace SampleMapEditor.LayoutEditor
             if (selected.Count == 0)
                 return;
 
-            var objects = GlobalSettings.ActorDatabase.Values.OrderBy(x => x.Name).ToList();
+            var objects = GlobalSettings.ActorDatabase.Values.OrderBy(x => x.__RowId).ToList();
 
             MapObjectSelector selector = new MapObjectSelector(objects);
             MapStudio.UI.DialogHandler.Show(TranslationSource.GetText("SELECT_OBJECT"), 400, 800, () =>

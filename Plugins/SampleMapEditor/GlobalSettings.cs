@@ -52,10 +52,8 @@ namespace SampleMapEditor
         static void LoadActorDb()
         {
             Console.WriteLine("~ Called GlobalSettings.LoadActorDb() ~");
-            // Find the Mush pack and load it
-            string path = GetContentPath($"RSDB/ActorInfo.Product.200.rstbl.byml.zs");
-            /*if (!File.Exists(path))
-                return;*/
+            // Find the Uncompressed ActorInfo and load it
+            string path = GetContentPath($"RSDB/ActorInfo.Product.200.rstbl.byml");
 
             if (!File.Exists(path))
             {
@@ -66,8 +64,8 @@ namespace SampleMapEditor
             var actorDb = new ActorDefinitionDb(path);
             foreach (var actor in actorDb.Definitions)
             {
-                //Console.WriteLine($"~ Adding Actor: {actor.Name}");
-                ActorDatabase.Add(actor.Name, actor);
+                Console.WriteLine($"~ Adding Actor: {actor.__RowId}");
+                ActorDatabase.Add(actor.__RowId, actor);
             }
         }
 

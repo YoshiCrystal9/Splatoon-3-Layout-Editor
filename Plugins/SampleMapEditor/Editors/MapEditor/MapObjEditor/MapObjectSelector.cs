@@ -154,7 +154,7 @@ namespace SampleMapEditor.LayoutEditor
             {
                 var mapObject = objects[line_i];
                 //string resName = mapObject.ResNames.FirstOrDefault();
-                string resName = mapObject.ResName;
+                string resName = mapObject.__RowId;
 
                 //Get the icon
                 var icon = IconManager.GetTextureIcon("Node");
@@ -169,10 +169,10 @@ namespace SampleMapEditor.LayoutEditor
 
                 //Selection handling
                 //bool isSelected = selectedObject == mapObject.ObjId;
-                bool isSelected = selectedObject == mapObject.Name;
+                bool isSelected = selectedObject == mapObject.__RowId;
                 ImGui.AlignTextToFramePadding();
                 //bool select = ImGui.Selectable($"{mapObject.Label}##{mapObject.ObjId}", isSelected, ImGuiSelectableFlags.SpanAllColumns, itemSize);
-                bool select = ImGui.Selectable($"{mapObject.Name}##", isSelected, ImGuiSelectableFlags.SpanAllColumns, itemSize);
+                bool select = ImGui.Selectable($"{mapObject.__RowId}##", isSelected, ImGuiSelectableFlags.SpanAllColumns, itemSize);
                 bool hovered = ImGui.IsItemHovered();
                 ImGui.NextColumn();
 
@@ -184,12 +184,12 @@ namespace SampleMapEditor.LayoutEditor
                 if (select)
                 {
                     //Update selection
-                    selectedObject = mapObject.Name;
+                    selectedObject = mapObject.__RowId;
                 }
                 if (CloseOnSelect && hovered && ImGui.IsMouseClicked(0))
                 {
                     //Update selection
-                    selectedObject = mapObject.Name;
+                    selectedObject = mapObject.__RowId;
                     DialogHandler.ClosePopup(true);
                 }
 
@@ -215,8 +215,8 @@ namespace SampleMapEditor.LayoutEditor
                 //HasText |= actors[i].ObjId.ToString().IndexOf(_searchText, StringComparison.OrdinalIgnoreCase) >= 0;
                 
                 
-                bool HasText = actors[i].Name != null &&
-                    actors[i].Name.IndexOf(_searchText, StringComparison.OrdinalIgnoreCase) >= 0;
+                bool HasText = actors[i].__RowId != null &&
+                    actors[i].__RowId.IndexOf(_searchText, StringComparison.OrdinalIgnoreCase) >= 0;
                 //HasText |= actors[i].Name.IndexOf(_searchText, StringComparison.OrdinalIgnoreCase) >= 0; // Not necessary ???
 
                 if (isSearch && HasText || !isSearch)

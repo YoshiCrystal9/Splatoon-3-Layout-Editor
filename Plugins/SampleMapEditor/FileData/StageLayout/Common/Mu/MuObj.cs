@@ -11,19 +11,19 @@ namespace SampleMapEditor
     public class MuObj : MuElement, IByamlSerializable, IStageReferencable
     {
         [ByamlMember]
-        [BindGUI("Team", Category = "Object Properties")]
-        public int Team { get; set; }
+        [BindGUI("TeamCmp", Category = "Object Properties")]
+        public string TeamCmp { get; set; }
 
 
         public MuObj() : base()
         {
-            Team = 0;
+            TeamCmp = "{Team: Alpha}";
         }
 
         // Copying Contstructor
         public MuObj(MuObj other) : base(other)
         {
-            Team = other.Team;
+            TeamCmp = other.TeamCmp;
         }
 
         public override MuObj Clone()

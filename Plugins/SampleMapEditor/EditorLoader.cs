@@ -102,8 +102,8 @@ namespace SampleMapEditor
                 InstanceHeapSize = actor["InstanceHeapSize"];
                 IsCalcNodePushBack = actor["IsCalcNodePushBack"];
                 IsFarActor = actor["IsFarActor"];
-                ModelAabbMax = actor["ModelAabbMax"];
-                ModelAabbMin = actor["ModelAabbMin"];
+                //ModelAabbMax = actor["ModelAabbMax"];
+                //ModelAabbMin = actor["ModelAabbMin"];
                 __RowId = actor["__RowId"];
             }
 
@@ -147,7 +147,7 @@ namespace SampleMapEditor
         private void ParseActorDb()
         {
             //string mushPackPath = $"{PluginConfig.S2GamePath}/Pack/Mush.release.pack";
-            string mushPackPath = GetContentPath("RSDB/ActorInfo.Product.200.rstbl.byml.zs");
+            string mushPackPath = GetContentPath("RSDB/ActorInfo.Product.200.rstbl.byml");
             BymlFileData actorDbByml = new BymlFileData();
             //SARC mushSARC = new SARC();
             actorDbByml = ByamlFile.LoadN(mushPackPath, true);
@@ -227,27 +227,27 @@ namespace SampleMapEditor
             ParseActorDb();
 
             //SARC arc = (SARC)STFileLoader.OpenFileFormat(stream, FileInfo.FilePath);
-            SARC arc = new SARC();
-            arc.Load(stream);
-            BymlFileData lytByml = ByamlFile.LoadN(arc.files[0].FileData, false);
-            
+            //SARC arc = new SARC();
+            //arc.Load(stream);
+            BymlFileData lytByml = ByamlFile.LoadN(stream, true);
+
             MapObjList.Clear();
 
             // Print out the name of each object that will be loaded
-            foreach (var obj in lytByml.RootNode["Objs"])
+            foreach (var obj in lytByml.RootNode["Actors"])
             {
                 Console.WriteLine(obj["Name"]);
-                float x = obj["Translate"]["X"];
-                float y = obj["Translate"]["Y"];
-                float z = obj["Translate"]["Z"];
-                Console.WriteLine($"  Pos: {x}, {y}, {z}");
+                //float x = obj["Translate"]["X"];
+                //float y = obj["Translate"]["Y"];
+                //float z = obj["Translate"]["Z"];
+                //Console.WriteLine($"  Pos: {x}, {y}, {z}");
                 MapObjList.Add(obj);
             }
 
-            Console.WriteLine("Object list:");
+            Console.WriteLine("Actors list:");
             foreach (var obj in MapObjList)
             {
-                Console.WriteLine($"  Object name: {obj["Name"]}");
+                Console.WriteLine($"  Actors name: {obj["Name"]}");
             }
 
             // (TESTING) Load the first object in the list

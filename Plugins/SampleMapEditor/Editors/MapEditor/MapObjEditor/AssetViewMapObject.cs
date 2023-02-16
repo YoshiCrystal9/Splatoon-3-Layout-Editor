@@ -32,7 +32,7 @@ namespace SampleMapEditor.LayoutEditor
 
         public void AddAsset(List<AssetItem> assets, ActorDefinition actor)
         {
-            string resName = actor.ResName;
+            string resName = actor.__RowId;
             
             /*string icon = "Node";
             if (IconManager.HasIcon($"{Runtime.ExecutableDir}/Lib/Images/MapObjects/{resName}.png"))
@@ -42,9 +42,9 @@ namespace SampleMapEditor.LayoutEditor
             if (IconManager.HasIcon($"{Runtime.ExecutableDir}\\Lib\\Images\\MapObjects\\{resName}.png"))
                 icon = IconManager.GetTextureIcon($"{Runtime.ExecutableDir}\\Lib\\Images\\MapObjects\\{resName}.png");
 
-            assets.Add(new MapObjectAsset($"MapObject_{actor.Name}")
+            assets.Add(new MapObjectAsset($"MapObject_{actor.__RowId}")
             {
-                Name = actor.Name,
+                Name = actor.__RowId,
                 ActorDefinition = actor,
                 Icon = icon,
             });
@@ -83,7 +83,7 @@ namespace SampleMapEditor.LayoutEditor
         {
             get
             {
-                if (AssetViewMapObject.filterObjPath && ActorDefinition.FmdbName.Length == 0)
+                if (AssetViewMapObject.filterObjPath && ActorDefinition.__RowId.Length == 0)
                     return false;
 
                 return true;

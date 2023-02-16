@@ -1,4 +1,6 @@
-﻿using MapStudio.UI;
+﻿using Discord;
+using IONET.Collada.FX.Texturing;
+using MapStudio.UI;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -50,30 +52,30 @@ namespace SampleMapEditor.LayoutEditor
             // Add a RespawnPos
             MuObj obj0 = new MuObj()
             {
-                Id = "obj0",
-                //IsLinkDest = false,
+                //Gyaml = "Obj_RespawnPos",
+                //Hash = "0",
                 Layer = "Cmn",
-                Team = 0,
-                Name = "RespawnPos",
-                Translate = new ByamlVector3F(-200f, 0f, -200f),
-                Scale = new ByamlVector3F(1f, 1f, 1f),
-                Rotate = new ByamlVector3F(0f, 0f, 0f),
-                //Links = new List<LinkInfo> { },
+                //InstanceID = "04466680 - 3901 - 2c6d - 6ebf - 73d1d3bfbb4e",
+                Name = "Obj_RespawnPos",
+                //Phive = Placement = "{ID: 0}",
+                //SRTHash = 1955495318,
+                TeamCmp = "{Team: Alpha}",
+                Translate = new ByamlVector3F(0f, 0f, -200f),
             };
             stageDefinition.Objs.Add(obj0);
 
             // Add a second RespawnPos
             MuObj obj1 = new MuObj()
             {
-                Id = "obj1",
-                //IsLinkDest = false,
+                //Gyaml = "Obj_RespawnPos",
+                //Hash = "1",
                 Layer = "Cmn",
-                Team = 1,
-                Name = "RespawnPos",
-                Translate = new ByamlVector3F(200f, 0f, 200f),
-                Scale = new ByamlVector3F(1f, 1f, 1f),
-                Rotate = new ByamlVector3F(0f, 0f, 0f),
-                //Links = new List<LinkInfo> { },
+                //InstanceID = "04466680 - 3901 - 2c6d - 6ebf - 73d1d3bfbb4e",
+                Name = "Obj_RespawnPos",
+                //Phive = Placement = "{ID: 1}",
+                //SRTHash = 1955495318,
+                TeamCmp = "{Team: Bravo}",
+                Translate = new ByamlVector3F(0f, 0f, 200f),
             };
             stageDefinition.Objs.Add(obj1);
 

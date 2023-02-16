@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CafeLibrary;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -15,83 +16,110 @@ namespace SampleMapEditor
         // ---- PROPERTIES ---------------------------------------------------------------------------------------------
 
         [ByamlMember]
-        [BindGUI("Class Name")]
+        [BindGUI("CalcPriority")]
+        public string CalcPriority
+        {
+            get => calcpriority;
+            set => SetField(ref calcpriority, value);
+        }
+        private string calcpriority;
+
+
+        [ByamlMember]
+        [BindGUI("Category")]
+        public string Category
+        {
+            get => category;
+            set => SetField(ref category, value);
+        }
+        private string category;
+
+
+        [ByamlMember]
+        [BindGUI("ClassName")]
         public string ClassName
         {
-            get => className;
-            set => SetField(ref className, value);
+            get => classname;
+            set => SetField(ref classname, value);
         }
-        private string className;
+        private string classname;
 
 
         [ByamlMember]
-        [BindGUI("Fmdb Name")]
-        public string FmdbName
+        [BindGUI("Fmdb")]
+        public string Fmdb
         {
-            get => fmdbName;
-            set => SetField(ref fmdbName, value);
+            get => fmdb;
+            set => SetField(ref fmdb, value);
         }
-        private string fmdbName;
+        private string fmdb;
 
 
         [ByamlMember]
-        [BindGUI("Jmp Name")]
-        public string JmpName
+        [BindGUI("InstanceHeapSize")]
+        public int InstanceHeapSize
         {
-            get => jmpName;
-            set => SetField(ref jmpName, value);
+            get => instanceheapsize;
+            set => SetField(ref instanceheapsize, value);
         }
-        private string jmpName;
+        private int instanceheapsize;
 
 
         [ByamlMember]
-        [BindGUI("Link User Name")]
-        public string LinkUserName
+        [BindGUI("IsCalcNodePushBack")]
+        public bool IsCalcNodePushBack
         {
-            get => linkUserName;
-            set => SetField(ref linkUserName, value);
+            get => issalcnodepushback;
+            set => SetField(ref issalcnodepushback, value);
         }
-        private string linkUserName;
+        private bool issalcnodepushback;
 
 
         [ByamlMember]
-        [BindGUI("Name")]
-        public string Name
+        [BindGUI("IsFarActor")]
+        public bool IsFarActor
         {
-            get => name;
-            set => SetField(ref name, value);
+            get => isfaractor;
+            set => SetField(ref isfaractor, value);
         }
-        private string name;
+        private bool isfaractor;
 
 
         [ByamlMember]
-        [BindGUI("Params File Base Name")]
-        public string ParamsFileBaseName
+        [BindGUI("IsNotTurnToActor")]
+        public bool IsNotTurnToActor
         {
-            get => paramsFileBaseName;
-            set => SetField(ref paramsFileBaseName, value);
+            get => isnotturntoactor;
+            set => SetField(ref isnotturntoactor, value);
         }
-        private string paramsFileBaseName;
-
+        private bool isnotturntoactor;
 
         [ByamlMember]
-        [BindGUI("Res Jmp Name")]
-        public string ResJmpName
+        [BindGUI("ModelAabbMax")]
+        public ByamlVector3F ModelAabbMax
         {
-            get => resJmpName;
-            set => SetField(ref resJmpName, value);
+            get => modelaabbmax;
+            set => SetField(ref modelaabbmax, value);
         }
-        private string resJmpName;
-
+        private ByamlVector3F modelaabbmax;
 
         [ByamlMember]
-        [BindGUI("Res Name")]
-        public string ResName
+        [BindGUI("ModelAabbMin")]
+        public ByamlVector3F ModelAabbMin
         {
-            get => resName;
-            set => SetField(ref resName, value);
+            get => modelaabbmin;
+            set => SetField(ref modelaabbmin, value);
         }
-        private string resName;
+        private ByamlVector3F modelaabbmin;
+
+        [ByamlMember]
+        [BindGUI("__RowId")]
+        public string __RowId
+        {
+            get => __rowid;
+            set => SetField(ref __rowid, value);
+        }
+        private string __rowid;
 
 
 
